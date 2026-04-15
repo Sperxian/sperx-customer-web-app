@@ -9,7 +9,6 @@ export function AppHeader() {
   const iconLocation = "/barako-cafe/icon.svg";
 
   return (
-    // <header className="flex items-center gap-3 bg-[var(--primary)] px-4 py-3 flex-shrink-0">
     <header className="flex items-center gap-3 bg-primary px-4 py-3 flex-shrink-0">
       <Image
         className="dark:invert bg-white rounded-full object-cover"
@@ -21,14 +20,11 @@ export function AppHeader() {
       />
       <div>
         <h1
-          className="text-white text-3xl font-medium leading-tight"
+          className="text-white text-xl font-medium leading-tight"
           style={{ fontFamily: "'Playfair Display', serif" }}
         >
           {shopName}
         </h1>
-        <p className="text-white text-xs tracking-widest uppercase font-medium">
-          {loyaltyProgramName}
-        </p>
       </div>
     </header>
   );
