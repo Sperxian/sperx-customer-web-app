@@ -1,13 +1,14 @@
-import { EXISTING_MEMBER } from "@/lib/stubs";
 import { InfoIcon } from "lucide-react";
 import { useState } from "react";
 
-export function LoyaltyCardSection() {
-  const { card }= EXISTING_MEMBER;
+interface LoyaltyCardSectionProps {
+  card: LoyaltyCardData;
+}
 
+export function LoyaltyCardSection({ card }: LoyaltyCardSectionProps) {
   return (
     <div>
-      <p className="text-sm uppercase tracking-widest mb-2">
+      <p className="text-sm capitalize mb-2 text-foreground/50">
         Loyalty Card
       </p>
       <LoyaltyCard card={card}/>
