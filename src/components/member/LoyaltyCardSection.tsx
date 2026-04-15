@@ -1,6 +1,7 @@
 import { InfoIcon } from "lucide-react";
 import { useState } from "react";
 import { LoyaltyStamp } from "../shared/LoyaltyStamp";
+import { QRCodeSVG } from "qrcode.react";
 
 interface LoyaltyCardSectionProps {
   card: LoyaltyCardData;
@@ -144,7 +145,7 @@ export function LoyaltyCardBack({ card }: LoyaltyCardBackProps) {
       </p>
 
       <div className="bg-white rounded-lg p-4 mb-2">
-        <QrCode size={108} />
+        <QrCode data={card.memberId} size={140} color="var(--primary)"/>
       </div>
 
       <p className="text-xs text-white/50">
@@ -192,36 +193,20 @@ export function StampGrid({ total, collected }: StampGridProps) {
 }
 
 interface QrCodeProps {
+  data: string;
   size?: number;
   color?: string;
-  image?: boolean;
+  bgColor?: string;
+  errorLevel?: "L" | "M" | "Q" | "H";
 }
 
-export function QrCode({ size = 108, color = "var(--primary)" }: QrCodeProps) {
+export function QrCode({ data, size = 120, color = "var(--secondary)", bgColor = "white", errorLevel = "H" }: QrCodeProps) {
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 108 108"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      {/* Top-left finder */}
-      <rect x="5" y="5" width="34" height="34" rx="3" stroke={color} strokeWidth="2.2" fill="none" />
-      <rect x="12" y="12" width="20" height="20" rx="1.5" fill={color} />
-      {/* Top-right finder */}
-      <rect x="69" y="5" width="34" height="34" rx="3" stroke={color} strokeWidth="2.2" fill="none" />
-      <rect x="76" y="12" width="20" height="20" rx="1.5" fill={color} />
-      {/* Bottom-left finder */}
-      <rect x="5" y="69" width="34" height="34" rx="3" stroke={color} strokeWidth="2.2" fill="none" />
-      <rect x="12" y="76" width="20" height="20" rx="1.5" fill={color} />
-      {/* Data modules */}
-      {[54,63,72,81,90,99].map((x) => <rect key={`r0-${x}`} x={x} y="54" width="6" height="6" fill={color} />)}
-      {[54,72,90].map((x) => <rect key={`r1-${x}`} x={x} y="63" width="6" height="6" fill={color} />)}
-      {[54,63,81,99].map((x) => <rect key={`r2-${x}`} x={x} y="72" width="6" height="6" fill={color} />)}
-      {[54,72,90].map((x) => <rect key={`r3-${x}`} x={x} y="81" width="6" height="6" fill={color} />)}
-      {[54,63,81].map((x) => <rect key={`r4-${x}`} x={x} y="90" width="6" height="6" fill={color} />)}
-      {[54,72,99].map((x) => <rect key={`r5-${x}`} x={x} y="99" width="6" height="6" fill={color} />)}
-    </svg>
-  )
+    <QRCodeSVG
+      value={data}
+      size={size}
+      bgColor={bgColor}
+      fgColor={color}
+      level={errorLevel}
+    />);
 }
