@@ -1,3 +1,5 @@
+import { LoyaltyStamp } from "../shared/LoyaltyStamp";
+
 interface HistoryEntry {
   label: string;
   date: string;
@@ -35,7 +37,7 @@ export function ActivityHistorySection({ entries }: ActivityHistoryProps) {
 
             {/* Icon box */}
             <div className="w-[36px] aspect-square rounded-full bg-primary flex items-center justify-center flex-shrink-0">
-              {/* <CoffeeCup filled size={24} /> */}
+              <LoyaltyStamp filled size={18} icon="coffee" />
             </div>
           </div>
         );
