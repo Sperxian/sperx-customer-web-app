@@ -18,7 +18,7 @@ export function LoyaltyCardSection({ card }: LoyaltyCardSectionProps) {
   );
 }
 
-interface LoyaltyCardData {
+export interface LoyaltyCardData {
   loyaltyProgramName: string;
   memberId: string;
   totalStamps: number;
