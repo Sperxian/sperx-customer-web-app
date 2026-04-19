@@ -2,7 +2,7 @@
 
 import { ActivityHistorySection } from "@/components/member/ActivityHistorySection";
 import { LoyaltyCardData, LoyaltyCardSection } from "@/components/member/LoyaltyCardSection";
-import { getMember } from "@/lib/api/member";
+import { getMemberLoyalty } from "@/lib/api/member";
 import { EXISTING_MEMBER } from "@/lib/stubs";
 import { use, useEffect, useState } from "react";
 
@@ -21,13 +21,20 @@ export default function MemberPage({ params }: PageParams) {
   useEffect(() => {
     const fetchMember = async() => {
       console.log("Fetching member data for memberId:", memberId);
-      const memberData = await getMember(memberId);
+      const memberLoyalty = await getMemberLoyalty(memberId);
+
+      console.log({ memberData: memberLoyalty });
+      if (!memberLoyalty) {
+        console.warn("No member loyalty data found, using stub data");
+        return;
+      }
+
       setCard({
-        memberId: memberData.memberId,
-        loyaltyProgramName: memberData.loyaltyProgramName,  
-        totalStamps: memberData.totalStamps,
-        collectedStamps: memberData.collectedStamps,
-        rewardDescription: memberData.rewardDescription,
+        memberId: memberLoyalty.id,
+        loyaltyProgramName: memberLoyalty.loyaltyProgram.name,
+        totalStamps: memberLoyalty.loyaltyProgram.config.goalPoints,
+        collectedStamps: memberLoyalty.points,
+        rewardDescription: memberLoyalty.loyaltyProgram.config.reward,
       });
     }
 

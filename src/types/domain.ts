@@ -1,7 +1,13 @@
-export interface MemberResponse {
-  memberId: string;
-  loyaltyProgramName: string;
-  totalStamps: number;
-  collectedStamps: number;
-  rewardDescription: string
+export interface MemberLoyalty {
+  id: string;
+  points: number;
+  loyaltyProgram: {
+    id: string;
+    name: string;
+    type: string;
+    config: {
+      goalPoints: number;
+      reward: string
+    }
+  },
 };
