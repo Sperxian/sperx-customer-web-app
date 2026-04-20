@@ -1,4 +1,4 @@
-export interface MemberLoyalty {
+export type MemberLoyalty = {
   id: string;
   points: number;
   loyaltyProgram: {
@@ -10,4 +10,19 @@ export interface MemberLoyalty {
       reward: string
     }
   },
+};
+
+export type MemberPointsHistory = {
+  page: number;
+  size: number;
+  total: number;
+  items: MemberPointsTracking[];
+}
+
+export type MemberPointsTracking = {
+  id: string;
+  memberId: string;
+  points: number;
+  notes?: string;
+  dateCreated: Date;
 };

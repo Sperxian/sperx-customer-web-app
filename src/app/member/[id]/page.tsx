@@ -2,8 +2,9 @@
 
 import { ActivityHistorySection } from "@/components/member/ActivityHistorySection";
 import { LoyaltyCardData, LoyaltyCardSection } from "@/components/member/LoyaltyCardSection";
-import { getMemberLoyalty } from "@/lib/api/member";
+import { getMemberLoyalty, getMemberPointsHistory } from "@/lib/api/member";
 import { EXISTING_MEMBER } from "@/lib/stubs";
+import { MemberPointsHistory } from "@/types/domain";
 import { use, useEffect, useState } from "react";
 
 interface PageParams {
@@ -13,30 +14,35 @@ interface PageParams {
 }
 
 export default function MemberPage({ params }: PageParams) {
-  const { activityHistory } = EXISTING_MEMBER;
   const { id: memberId } = use(params)
 
   const [card, setCard] = useState<LoyaltyCardData | null>(null);
+  const [history, setHistory] = useState<MemberPointsHistory | null>(null);
 
   useEffect(() => {
-    const fetchMember = async() => {
-      console.log("Fetching member data for memberId:", memberId);
-      const memberLoyalty = await getMemberLoyalty(memberId);
+    const fetchMember = async () => {
+      try {
+        const memberLoyalty = await getMemberLoyalty(memberId);
+        
+        if (!memberLoyalty) {
+          console.warn("No member loyalty data found");
+          return;
+        }
 
-      console.log({ memberData: memberLoyalty });
-      if (!memberLoyalty) {
-        console.warn("No member loyalty data found, using stub data");
-        return;
+        const historyResponse = await getMemberPointsHistory(memberId);
+        setHistory(historyResponse);
+
+        setCard({
+          memberId: memberLoyalty.id,
+          loyaltyProgramName: memberLoyalty.loyaltyProgram.name,
+          totalStamps: memberLoyalty.loyaltyProgram.config.goalPoints,
+          collectedStamps: memberLoyalty.points,
+          rewardDescription: memberLoyalty.loyaltyProgram.config.reward,
+        });
+      } catch (error) {
+        console.error("Failed to fetch member loyalty:", error);
       }
-
-      setCard({
-        memberId: memberLoyalty.id,
-        loyaltyProgramName: memberLoyalty.loyaltyProgram.name,
-        totalStamps: memberLoyalty.loyaltyProgram.config.goalPoints,
-        collectedStamps: memberLoyalty.points,
-        rewardDescription: memberLoyalty.loyaltyProgram.config.reward,
-      });
-    }
+    };
 
     fetchMember();
   }, [memberId]);
@@ -45,7 +51,7 @@ export default function MemberPage({ params }: PageParams) {
   return (
     <div className="grid gap-8 p-4">
       {card && <LoyaltyCardSection card={card} />}
-      {activityHistory &&<ActivityHistorySection entries={activityHistory} />}
+      {history && <ActivityHistorySection history={history} />}
     </div>
   );
 }

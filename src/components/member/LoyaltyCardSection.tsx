@@ -10,10 +10,8 @@ interface LoyaltyCardSectionProps {
 export function LoyaltyCardSection({ card }: LoyaltyCardSectionProps) {
   return (
     <div>
-      <p className="text-sm capitalize mb-2 text-foreground/50">
-        Loyalty Card
-      </p>
-      <LoyaltyCard card={card}/>
+      <p className="text-sm capitalize mb-2 text-foreground/50">Loyalty Card</p>
+      <LoyaltyCard card={card} />
     </div>
   );
 }
@@ -30,9 +28,7 @@ interface LoyaltyCardProps {
   card: LoyaltyCardData;
 }
 
-function LoyaltyCard({
-  card,
-}: LoyaltyCardProps) {
+function LoyaltyCard({ card }: LoyaltyCardProps) {
   const [isFlipped, setIsFlipped] = useState(false);
 
   const hintMessage = (
@@ -53,13 +49,15 @@ function LoyaltyCard({
         <div className="w-full h-full">
           {/* Scene */}
           <div
-            onClick={()=>setIsFlipped(!isFlipped)}
+            onClick={() => setIsFlipped(!isFlipped)}
             className="w-full h-full [perspective:900px] cursor-pointer"
           >
             {/* Inner — rotates on flip */}
             <div
               className={`relative w-full h-full [transform-style:preserve-3d] transition-transform duration-500 ease-[cubic-bezier(0.4,0.2,0.2,1)] ${
-                isFlipped ? "[transform:rotateY(180deg)]" : "[transform:rotateY(0deg)]"
+                isFlipped
+                  ? "[transform:rotateY(180deg)]"
+                  : "[transform:rotateY(0deg)]"
               }`}
             >
               {/* Front face */}
@@ -76,13 +74,10 @@ function LoyaltyCard({
         </div>
       </div>
 
-      <div>
-        {hintMessage}
-      </div>
+      <div>{hintMessage}</div>
     </div>
   );
 }
-
 
 interface LoyaltyCardFrontProps {
   card: LoyaltyCardData;
@@ -102,15 +97,11 @@ export function LoyaltyCardFront({ card }: LoyaltyCardFrontProps) {
           {card.loyaltyProgramName}
         </p>
         <p className="text-xs text-secondary">
-          {card.collectedStamps} / {card.totalStamps}
+          {Math.trunc(card.collectedStamps)} / {card.totalStamps}
         </p>
-
       </div>
 
-      <StampGrid
-        total={card.totalStamps}
-        collected={card.collectedStamps}
-      />
+      <StampGrid total={card.totalStamps} collected={card.collectedStamps} />
 
       <div className="flex items-center gap-2 mt-2.5">
         <div className="flex-1 h-1 bg-[#5C2D0A] rounded-full overflow-hidden">
@@ -136,7 +127,6 @@ interface LoyaltyCardBackProps {
 export function LoyaltyCardBack({ card }: LoyaltyCardBackProps) {
   return (
     <div className="h-full bg-primary rounded-3xl p-4 relative overflow-hidden flex flex-col items-center justify-center">
-
       {/* Decorative circle */}
       <div className="absolute -top-[28px] -left-[28px] w-[90px] h-[90px] rounded-full border-[18px] border-white/5" />
 
@@ -145,12 +135,10 @@ export function LoyaltyCardBack({ card }: LoyaltyCardBackProps) {
       </p>
 
       <div className="bg-white rounded-lg p-4 mb-2">
-        <QrCode data={card.memberId} size={140} color="var(--primary)"/>
+        <QrCode data={card.memberId} size={140} color="var(--primary)" />
       </div>
 
-      <p className="text-xs text-white/50">
-        {card.memberId}
-      </p>
+      <p className="text-xs text-white/50">{card.memberId}</p>
     </div>
   );
 }
@@ -200,7 +188,13 @@ interface QrCodeProps {
   errorLevel?: "L" | "M" | "Q" | "H";
 }
 
-export function QrCode({ data, size = 120, color = "var(--secondary)", bgColor = "white", errorLevel = "H" }: QrCodeProps) {
+export function QrCode({
+  data,
+  size = 120,
+  color = "var(--secondary)",
+  bgColor = "white",
+  errorLevel = "H",
+}: QrCodeProps) {
   return (
     <QRCodeSVG
       value={data}
@@ -208,5 +202,6 @@ export function QrCode({ data, size = 120, color = "var(--secondary)", bgColor =
       bgColor={bgColor}
       fgColor={color}
       level={errorLevel}
-    />);
+    />
+  );
 }

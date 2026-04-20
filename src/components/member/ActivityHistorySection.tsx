@@ -1,47 +1,52 @@
+import { MemberPointsHistory } from "@/types/domain";
+import { MemberPointsTracking } from "@/types/domain";
 import { LoyaltyStamp } from "../shared/LoyaltyStamp";
-
-interface HistoryEntry {
-  label: string;
-  date: string;
-}
+import { formatDateTime } from "@/lib/utils/date.utils";
 
 interface ActivityHistoryProps {
-  entries: HistoryEntry[];
+  history: MemberPointsHistory;
 }
 
-export function ActivityHistorySection({ entries }: ActivityHistoryProps) {
+export function ActivityHistorySection({ history }: ActivityHistoryProps) {
   return (
     <div>
       <p className="text-sm capitalize mb-2 text-foreground/50">
         Recent activity
       </p>
 
-      {entries.map((entry, i) => {
-        const isLast = (i === entries.length - 1);
+      {history.items.map((entry, i) => {
+        const isLast = (i === history.items.length - 1);
 
-        return (
-          <div
-            key={i}
-            className={`flex justify-between items-center py-2 ${
-              !isLast ? "border-b border-foreground/10" : ""
-            }`}
-          >
-            <div>
-              <p className="text-sm text-primary">
-                {entry.label}
-              </p>
-              <p className="text-xs text-foreground/50">
-                {entry.date}
-              </p>
-            </div>
-
-            {/* Icon box */}
-            <div className="w-[36px] aspect-square rounded-full bg-primary flex items-center justify-center flex-shrink-0">
-              <LoyaltyStamp filled size={18} icon="coffee" />
-            </div>
-          </div>
-        );
+        return (<ActivityHistoryEntry key={i} entry={entry} isLast={isLast} />);
       })}
+    </div>
+  );
+}
+
+interface ActivityHistoryEntryProps {
+  entry: MemberPointsTracking;
+  isLast: boolean;
+}
+
+export function ActivityHistoryEntry({ entry, isLast }: ActivityHistoryEntryProps) {
+  return (
+    <div
+      className={`flex justify-between items-center py-2 ${
+        !isLast ? "border-b border-foreground/10" : ""
+      }`}
+    >
+      <div>
+        <p className="text-sm text-primary">
+          Collected 1 stamp
+        </p>
+        <p className="text-xs text-foreground/50">
+          {formatDateTime(entry.dateCreated)}
+        </p>
+      </div>
+
+      <div className="w-[36px] aspect-square rounded-full bg-primary flex items-center justify-center flex-shrink-0">
+        <LoyaltyStamp filled size={18} icon="coffee" />
+      </div>
     </div>
   );
 }
