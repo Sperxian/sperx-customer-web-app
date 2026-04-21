@@ -18,7 +18,7 @@ interface PageParams {
 
 export default function MemberPage({ params }: PageParams) {
   const { id: memberId } = use(params);
-
+  // TODO: Get shop name and etc.
   const [card, setCard] = useState<LoyaltyCardData | null>(null);
   const [history, setHistory] = useState<MemberPointsHistory | null>(null);
 
