@@ -1,20 +1,22 @@
-'use client';
+"use client";
 
 import { ActivityHistorySection } from "@/components/member/ActivityHistorySection";
-import { LoyaltyCardData, LoyaltyCardSection } from "@/components/member/LoyaltyCardSection";
+import {
+  LoyaltyCardData,
+  LoyaltyCardSection,
+} from "@/components/member/LoyaltyCardSection";
 import { getMemberLoyalty, getMemberPointsHistory } from "@/lib/api/member";
-import { EXISTING_MEMBER } from "@/lib/stubs";
 import { MemberPointsHistory } from "@/types/domain";
 import { use, useEffect, useState } from "react";
 
 interface PageParams {
   params: Promise<{
-    id: string
+    id: string;
   }>;
 }
 
 export default function MemberPage({ params }: PageParams) {
-  const { id: memberId } = use(params)
+  const { id: memberId } = use(params);
 
   const [card, setCard] = useState<LoyaltyCardData | null>(null);
   const [history, setHistory] = useState<MemberPointsHistory | null>(null);
@@ -23,7 +25,7 @@ export default function MemberPage({ params }: PageParams) {
     const fetchMember = async () => {
       try {
         const memberLoyalty = await getMemberLoyalty(memberId);
-        
+
         if (!memberLoyalty) {
           console.warn("No member loyalty data found");
           return;
@@ -46,7 +48,6 @@ export default function MemberPage({ params }: PageParams) {
 
     fetchMember();
   }, [memberId]);
-
 
   return (
     <div className="grid gap-8 p-4">
