@@ -10,6 +10,7 @@ export type MemberLoyalty = {
       reward: string
     }
   },
+  dateCreated: Date,
 };
 
 export type MemberPointsHistory = {

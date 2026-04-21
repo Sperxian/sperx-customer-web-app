@@ -1,11 +1,18 @@
 import { MemberLoyalty, MemberPointsHistory } from "@/types/domain";
 import apiClient from "./client";
 
-/**
- * Fetch member data from backend API
- * Falls back to stub data if API call fails (for development)
- */
-export async function getMemberLoyalty(memberId: string): Promise<MemberLoyalty|null> {
+
+export async function createMemberLoyalty(loyaltyId: string): Promise<MemberLoyalty> {
+  try {
+    const { data } = await apiClient.post<MemberLoyalty>(`/loyalty/${loyaltyId}`);
+    return data;
+  } catch (error) {
+    console.error('Failed to create new member loyalty', error)
+    throw error;
+  }
+}
+
+export async function getMemberLoyalty(memberId: string): Promise<MemberLoyalty | null> {
   try {
     const response = await apiClient.get<MemberLoyalty>(`/members/${memberId}/loyalty`);
     return response.data;
@@ -17,7 +24,7 @@ export async function getMemberLoyalty(memberId: string): Promise<MemberLoyalty|
   }
 }
 
-export async function getMemberPointsHistory(memberId: string, page: number = 0, size: number = 20): Promise<MemberPointsHistory|null> {
+export async function getMemberPointsHistory(memberId: string, page: number = 0, size: number = 20): Promise<MemberPointsHistory | null> {
   const params = { page, size };
   try {
     const response = await apiClient.get<MemberPointsHistory>(`/members/${memberId}/loyalty/history`, { params });

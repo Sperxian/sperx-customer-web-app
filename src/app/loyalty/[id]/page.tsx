@@ -1,5 +1,6 @@
 "use client";
 
+import { createMemberLoyalty } from "@/lib/api/member";
 import { useRouter } from "next/navigation";
 import { use, useEffect, useState } from "react";
 
@@ -20,30 +21,40 @@ export default function MemberPage({ params }: PageParams) {
   const [state, _setState] = useState<"INITIAL">("INITIAL");
   const { id: programId } = use(params);
 
-  const LOCAL_STORAGE_KEY = `spx-member-${programId}`;
+  const LOCAL_STORAGE_KEY = `spx-loyalty-${programId}`;
 
   useEffect(() => {
-    const existingMemberData = localStorage.getItem(LOCAL_STORAGE_KEY);
+    async function joinLoyaltyProgram() {
+      const existingMemberData = localStorage.getItem(LOCAL_STORAGE_KEY);
 
-    const memberData: MemberData | null = existingMemberData
-      ? (JSON.parse(existingMemberData) as MemberData)
-      : null;
+      const memberData: MemberData | null = existingMemberData
+        ? (JSON.parse(existingMemberData) as MemberData)
+        : null;
 
-    if (memberData) {
-      const memberPage = `/member/${memberData.memberId}`;
+      if (memberData) {
+        const memberPage = `/member/${memberData.memberId}`;
+        console.debug(`Redirecting to ${memberPage}`);
+        router.replace(memberPage);
+        return;
+      }
+
+      const { id: memberId, dateCreated: dateJoined } =
+        await createMemberLoyalty(programId);
+      console.debug(`Created new member ID: ${memberId}`);
+
+      const memberPage = `/member/${memberId}`;
       console.debug(`Redirecting to ${memberPage}`);
       router.replace(memberPage);
-    }
 
-    if (!memberData) {
-      // TODO: Stub member data
       const newMemberData = {
-        memberId: "8599e97e-a2c2-4b67-80ca-47c484467669",
-        dateCreated: new Date(),
+        memberId,
+        dateCreated: dateJoined,
       };
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(newMemberData));
     }
-  }, [LOCAL_STORAGE_KEY, router]);
+
+    joinLoyaltyProgram();
+  }, [LOCAL_STORAGE_KEY, router, programId]);
 
   return (
     <div className="grid gap-8 p-4">
