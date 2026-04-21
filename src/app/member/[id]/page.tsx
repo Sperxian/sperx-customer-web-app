@@ -1,6 +1,7 @@
 "use client";
 
 import { ActivityHistorySection } from "@/components/member/ActivityHistorySection";
+import { HowItWorksSection } from "@/components/member/HowItWorksSection";
 import {
   LoyaltyCardData,
   LoyaltyCardSection,
@@ -52,6 +53,7 @@ export default function MemberPage({ params }: PageParams) {
   return (
     <div className="grid gap-8 p-4">
       {card && <LoyaltyCardSection card={card} />}
+      {(history && history.items.length === 0) && <HowItWorksSection />}
       {history && <ActivityHistorySection history={history} />}
     </div>
   );

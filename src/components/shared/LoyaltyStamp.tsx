@@ -1,8 +1,33 @@
-import { BadgeCheckIcon, CakeIcon, CakeSliceIcon, CandyIcon, CarFrontIcon, CoffeeIcon, CookieIcon, CupSodaIcon, HamburgerIcon, HeartIcon, IceCream2Icon, IceCreamBowlIcon, IceCreamConeIcon, PawPrintIcon, PizzaIcon, PopsicleIcon, SaladIcon, SandwichIcon, ScissorsIcon, ShirtIcon, ShoppingBagIcon, StarIcon, UtensilsCrossedIcon, UtensilsIcon, WashingMachineIcon } from "lucide-react";
-
+import {
+  BadgeCheckIcon,
+  CakeIcon,
+  CakeSliceIcon,
+  CandyIcon,
+  CarFrontIcon,
+  CoffeeIcon,
+  CookieIcon,
+  CupSodaIcon,
+  HamburgerIcon,
+  HeartIcon,
+  IceCream2Icon,
+  IceCreamBowlIcon,
+  IceCreamConeIcon,
+  PawPrintIcon,
+  PizzaIcon,
+  PopsicleIcon,
+  SaladIcon,
+  SandwichIcon,
+  ScissorsIcon,
+  ShirtIcon,
+  ShoppingBagIcon,
+  StarIcon,
+  UtensilsCrossedIcon,
+  UtensilsIcon,
+  WashingMachineIcon,
+} from "lucide-react";
 
 interface LoyaltyStampProps {
-  icon: IconName
+  icon: IconName;
   filled: boolean;
   size?: number;
 }
@@ -37,9 +62,13 @@ type IconName = keyof typeof iconMap;
 
 const DEFAULT_ICON = BadgeCheckIcon;
 
-export function LoyaltyStamp({ filled=false, size=20, icon='badge' }: LoyaltyStampProps) {
+export function LoyaltyStamp({
+  filled = false,
+  size = 20,
+  icon = "badge",
+}: LoyaltyStampProps) {
   const IconComponent = iconMap[icon] ?? DEFAULT_ICON;
   const color = filled ? "var(--secondary)" : "white";
-  
+
   return <IconComponent color={color} size={size} />;
 }

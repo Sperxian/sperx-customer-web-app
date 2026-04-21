@@ -14,11 +14,24 @@ export function ActivityHistorySection({ history }: ActivityHistoryProps) {
         Recent activity
       </p>
 
-      {history.items.map((entry, i) => {
-        const isLast = (i === history.items.length - 1);
-
-        return (<ActivityHistoryEntry key={i} entry={entry} isLast={isLast} />);
-      })}
+      {history.items.length > 0 ? (
+        history.items.map((entry, i) => {
+          const isLast = i === history.items.length - 1;
+          return <ActivityHistoryEntry key={i} entry={entry} isLast={isLast} />;
+        })
+      ) : (
+        <div className="flex flex-col items-center justify-center gap-4 p-4">
+          <div className="aspect-square rounded-xl bg-primary/30 flex items-center justify-center flex-shrink-0 p-4">
+            <LoyaltyStamp filled={false} size={24} icon="coffee" />
+          </div>
+          <div className="flex flex-col items-center">
+            <p className="text-md text-primary">No stamps yet</p>
+            <p className="text-xs text-foreground/50">
+              Your activity will appear here after your first stamp.
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -28,7 +41,10 @@ interface ActivityHistoryEntryProps {
   isLast: boolean;
 }
 
-export function ActivityHistoryEntry({ entry, isLast }: ActivityHistoryEntryProps) {
+export function ActivityHistoryEntry({
+  entry,
+  isLast,
+}: ActivityHistoryEntryProps) {
   return (
     <div
       className={`flex justify-between items-center py-2 ${
@@ -36,9 +52,7 @@ export function ActivityHistoryEntry({ entry, isLast }: ActivityHistoryEntryProp
       }`}
     >
       <div>
-        <p className="text-sm text-primary">
-          Collected 1 stamp
-        </p>
+        <p className="text-sm text-primary">Collected 1 stamp</p>
         <p className="text-xs text-foreground/50">
           {formatDateTime(entry.dateCreated)}
         </p>
