@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import "../../globals.css";
+import "@/app/globals.css";
+import { AppHeader } from "@/components/shared/AppHeader";
 import { LOYALTY_PROGRAM_NAME, SHOP_NAME } from "@/lib";
 
 export const metadata: Metadata = {
@@ -7,7 +8,7 @@ export const metadata: Metadata = {
   description: LOYALTY_PROGRAM_NAME,
 };
 
-export default function FullLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -20,6 +21,9 @@ export default function FullLayout({
       <body className="h-full bg-gray-100 flex justify-center">
         {/* phone shell */}
         <div className="w-full md:max-w-md h-full md:h-[90vh] md:my-6 md:rounded-2xl bg-white shadow flex flex-col overflow-hidden">
+
+          {/* header */}
+          <AppHeader />
 
           {/* scroll area wrapper */}
           <div className="flex-1 relative overflow-hidden">
