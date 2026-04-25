@@ -1,13 +1,21 @@
+"use client";
+
 import { InfoIcon } from "lucide-react";
 import { useState } from "react";
 import { LoyaltyStamp } from "../shared/LoyaltyStamp";
 import { QRCodeSVG } from "qrcode.react";
+import { useMemberLoyalty } from "@/app/(main)/member/[id]/MemberContext";
 
-interface LoyaltyCardSectionProps {
-  card: LoyaltyCardData;
-}
+export function LoyaltyCardSection() {
+  const memberLoyalty = useMemberLoyalty();
+  const card = {
+    memberId: memberLoyalty.id,
+    loyaltyProgramName: memberLoyalty.loyaltyProgram.name,
+    totalStamps: memberLoyalty.loyaltyProgram.config.goalPoints,
+    collectedStamps: memberLoyalty.points,
+    rewardDescription: memberLoyalty.loyaltyProgram.config.reward,
+  };
 
-export function LoyaltyCardSection({ card }: LoyaltyCardSectionProps) {
   return (
     <div>
       <p className="text-sm capitalize mb-2 text-foreground/50">Loyalty Card</p>
@@ -30,7 +38,6 @@ interface LoyaltyCardProps {
 
 function LoyaltyCard({ card }: LoyaltyCardProps) {
   const [isFlipped, setIsFlipped] = useState(false);
-
   const hintMessage = (
     <p className="flex mt-2 text-center text-xs text-primary/80 items-center justify-center gap-[4px]">
       <InfoIcon size={11} />
@@ -82,6 +89,7 @@ function LoyaltyCard({ card }: LoyaltyCardProps) {
 interface LoyaltyCardFrontProps {
   card: LoyaltyCardData;
 }
+
 export function LoyaltyCardFront({ card }: LoyaltyCardFrontProps) {
   const remaining = card.totalStamps - card.collectedStamps;
   const pct = (card.collectedStamps / card.totalStamps) * 100;

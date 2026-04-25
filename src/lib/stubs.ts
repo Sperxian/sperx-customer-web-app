@@ -1,20 +1,17 @@
-import { LOYALTY_PROGRAM_NAME } from ".";
-
-
 export const NEW_MEMBER = Object.freeze({
   card: {
-    loyaltyProgramName: LOYALTY_PROGRAM_NAME,
+    loyaltyProgramName: "Café Barako Rewards",
     memberId: "b18da224-f443-4243-aeaf-8fca36ae0aea",
     totalStamps: 10,
     collectedStamps: 0,
     rewardDescription: "Free coffee",
-  }, 
+  },
   activityHistory: [],
 });
 
 export const EXISTING_MEMBER = Object.freeze({
   card: {
-    loyaltyProgramName: LOYALTY_PROGRAM_NAME,
+    loyaltyProgramName: "Café Barako Rewards",
     memberId: "b18da224-f443-4243-aeaf-8fca36ae0aea",
     totalStamps: 10,
     collectedStamps: 7,

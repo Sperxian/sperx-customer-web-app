@@ -10,6 +10,11 @@ export type MemberLoyalty = {
       reward: string
     }
   },
+  shop: {
+    id: string;
+    name: string;
+    config: Record<string, unknown>;
+  },
   dateCreated: Date,
 };
 
