@@ -103,13 +103,9 @@ export default function MemberPage({ params }: PageParams) {
         height={120}
         priority
       />
-      {/* {state} */}
 
       <div className="flex flex-col items-center gap-0 w-[75%]">
         <h1 className="text-3xl">Welcome</h1>
-        {/* <p className="text-sm text-center text-foreground/50">
-          We&apos;re checking your membership within this merchant
-        </p> */}
       </div>
 
       <div
