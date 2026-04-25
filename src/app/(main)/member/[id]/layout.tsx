@@ -1,5 +1,5 @@
 import "@/app/globals.css";
-import { AppHeader } from "@/components/shared/AppHeader";
+import { AppHeader } from "@/app/(main)/member/[id]/components/AppHeader";
 import { getMemberLoyalty } from "@/lib/api/member";
 import { MemberLoyaltyContextProvider } from "./MemberContext";
 

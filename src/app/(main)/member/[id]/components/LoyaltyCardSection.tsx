@@ -2,7 +2,7 @@
 
 import { InfoIcon } from "lucide-react";
 import { useState } from "react";
-import { LoyaltyStamp } from "../shared/LoyaltyStamp";
+import { LoyaltyStamp } from "./LoyaltyStamp";
 import { QRCodeSVG } from "qrcode.react";
 import { useMemberLoyalty } from "@/app/(main)/member/[id]/MemberContext";
 

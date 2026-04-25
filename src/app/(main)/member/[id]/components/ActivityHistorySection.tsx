@@ -1,6 +1,6 @@
 import { MemberPointsHistory } from "@/types/domain";
 import { MemberPointsTracking } from "@/types/domain";
-import { LoyaltyStamp } from "../shared/LoyaltyStamp";
+import { LoyaltyStamp } from "./LoyaltyStamp";
 import { formatDateTime } from "@/lib/utils/date.utils";
 
 interface ActivityHistoryProps {

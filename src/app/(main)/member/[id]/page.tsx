@@ -1,6 +1,6 @@
-import { ActivityHistorySection } from "@/components/member/ActivityHistorySection";
-import { HowItWorksSection } from "@/components/member/HowItWorksSection";
-import { LoyaltyCardSection } from "@/components/member/LoyaltyCardSection";
+import { ActivityHistorySection } from "@/app/(main)/member/[id]/components/ActivityHistorySection";
+import { HowItWorksSection } from "@/app/(main)/member/[id]/components/HowItWorksSection";
+import { LoyaltyCardSection } from "@/app/(main)/member/[id]/components/LoyaltyCardSection";
 import { getMemberPointsHistory } from "@/lib/api/member";
 
 interface PageParams {
