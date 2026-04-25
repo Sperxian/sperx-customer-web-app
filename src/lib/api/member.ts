@@ -18,8 +18,6 @@ export async function getMemberLoyalty(memberId: string): Promise<MemberLoyalty 
     return response.data;
   } catch (error) {
     console.error("Failed to fetch member data:", error);
-    // console.error("Request error:", error.message);
-    // Fallback to stub data for development
     return null;
   }
 }
@@ -38,7 +36,6 @@ export async function getMemberPointsHistory(memberId: string, page: number = 0,
 
   } catch (error) {
     console.error("Failed to fetch member points history:", error);
-    // Fallback to stub data for development
     return null;
   }
 }

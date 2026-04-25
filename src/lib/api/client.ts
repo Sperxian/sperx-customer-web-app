@@ -18,7 +18,6 @@ function getBaseURL(): string {
   // In client-side code
   return process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
 }
-console.log("API Base URL:", getBaseURL());
 /**
  * Create and configure axios instance
  */

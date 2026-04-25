@@ -47,10 +47,6 @@ export default function MemberPage({ params }: PageParams) {
   const currentStateMetadata = PAGE_STATE_METADATA[state];
 
   useEffect(() => {
-    console.log("Initializing...");
-  }, []);
-
-  useEffect(() => {
     const LOCAL_STORAGE_KEY = `spx-loyalty-${programId}`;
 
     const checkLocalMember = () => {
