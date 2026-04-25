@@ -8,13 +8,15 @@ export default async function MemberLayout({
   params,
 }: Readonly<{
   children: React.ReactNode;
-  params: { id: string };
+  params: Promise<{
+    id: string;
+  }>;
 }>) {
-  const {id: memberId} = await params;
+  const { id: memberId } = await params;
   const memberLoyalty = await getMemberLoyalty(memberId);
-  if(!memberLoyalty) {
+  if (!memberLoyalty) {
     // TODO: Redirect to not found
-    throw new Error('Member not found!');
+    throw new Error("Member not found!");
   }
 
   return (
