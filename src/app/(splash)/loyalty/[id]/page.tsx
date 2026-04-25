@@ -101,7 +101,7 @@ export default function MemberPage({ params }: PageParams) {
 
       <Image
         className="dark:invert bg-white aspect-square object-cover animate-pulse"
-        src={"/sperx-logo-zoomed.png"}
+        src={"/sperx-logo.png"}
         alt="Sperx"
         width={120}
         height={120}
