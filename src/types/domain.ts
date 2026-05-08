@@ -5,10 +5,7 @@ export type MemberLoyalty = {
     id: string;
     name: string;
     type: string;
-    config: {
-      goalPoints: number;
-      reward: string
-    }
+    config: StampBasedConfig;
   },
   shop: {
     id: string;
@@ -17,6 +14,18 @@ export type MemberLoyalty = {
   },
   dateCreated: Date,
 };
+
+export type StampBasedConfig = {
+  availableRewards: RewardMetadata[];
+};
+
+export type RewardMetadata = {
+  code: string;
+  name: string;
+  description?: string;
+  goalPoints: number;
+};
+
 
 export type MemberPointsHistory = {
   page: number;
