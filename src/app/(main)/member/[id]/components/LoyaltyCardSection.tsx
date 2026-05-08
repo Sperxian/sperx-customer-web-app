@@ -8,12 +8,14 @@ import { useMemberLoyalty } from "@/app/(main)/member/[id]/MemberContext";
 
 export function LoyaltyCardSection() {
   const memberLoyalty = useMemberLoyalty();
+  const [reward] = memberLoyalty.loyaltyProgram.config.availableRewards;
+
   const card = {
     memberId: memberLoyalty.id,
     loyaltyProgramName: memberLoyalty.loyaltyProgram.name,
-    totalStamps: memberLoyalty.loyaltyProgram.config.goalPoints,
+    totalStamps: reward.goalPoints,
     collectedStamps: memberLoyalty.points,
-    rewardDescription: memberLoyalty.loyaltyProgram.config.reward,
+    rewardDescription: reward.name ?? "reward",
   };
 
   return (
