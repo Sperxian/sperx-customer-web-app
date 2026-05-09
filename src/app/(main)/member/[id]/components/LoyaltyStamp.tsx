@@ -74,7 +74,7 @@ export function LoyaltyStamp({
 
   const finalIcon = (overrideIcon ?? stampIcon) as IconName;
   const IconComponent = iconMap[finalIcon] ?? DEFAULT_ICON;
-  const color = filled ? "var(--secondary)" : "white";
+  const color = filled ? "var(--secondary)" : "var(--primary-lighter)";
 
   return <IconComponent color={color} size={size} />;
 }
