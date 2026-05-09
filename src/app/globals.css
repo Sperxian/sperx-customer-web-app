@@ -3,15 +3,50 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  /* PRIMARY */
   --primary: #2d1060;
+
+  --primary-lightest: #e6ddff;
+  --primary-lighter: #6d4ab0;
+  --primary-light: #4a2687;
+
+  --primary-dark: #1f0846;
+  --primary-darker: #14042e;
+  --primary-darkest: #0b021a;
+
+  /* SECONDARY */
   --secondary: #ffb800;
+
+  --secondary-lightest: #fff6d1;
+  --secondary-lighter: #ffdf80;
+  --secondary-light: #ffca33;
+
+  --secondary-dark: #d69500;
+  --secondary-darker: #a37100;
+  --secondary-darkest: #6b4a00;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+
   --color-primary: var(--primary);
+  --color-primary-light: var(--primary-light);
+  --color-primary-lighter: var(--primary-lighter);
+  --color-primary-lightest: var(--primary-lightest);
+  --color-primary-dark: var(--primary-darker);
+  --color-primary-darker: var(--primary-darker);
+  --color-primary-darkest: var(--primary-darkest);
+
   --color-secondary: var(--secondary);
+  --color-secondary-light: var(--secondary-light);
+  --color-secondary-lighter: var(--secondary-lighter);
+  --color-secondary-lightest: var(--secondary-lightest);
+  --color-secondary-dark: var(--secondary-darker);
+  --color-secondary-darker: var(--secondary-darker);
+  --color-secondary-darkest: var(--secondary-darkest);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
