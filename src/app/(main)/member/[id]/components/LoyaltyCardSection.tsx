@@ -176,7 +176,7 @@ export function StampGrid({ total, collected }: StampGridProps) {
                 : "border-[1.5px] border-[#c8a0ff]/25 border-dashed bg-[rgba(255,255,255,0.04)]"
             }`}
           >
-            <LoyaltyStamp filled={filled} size={32} icon="coffee" />
+            <LoyaltyStamp filled={filled} size={32} />
 
             {!filled && (
               <span className="text-[8px] text-[#c8a0ff]/20 absolute bottom-[3px] right-[4px]">

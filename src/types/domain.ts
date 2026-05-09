@@ -16,6 +16,7 @@ export type MemberLoyalty = {
 };
 
 export type StampBasedConfig = {
+  stampIcon: string;
   availableRewards: RewardMetadata[];
 };
 

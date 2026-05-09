@@ -22,7 +22,7 @@ export function ActivityHistorySection({ history }: ActivityHistoryProps) {
       ) : (
         <div className="flex flex-col items-center justify-center gap-4 p-4">
           <div className="aspect-square rounded-xl bg-primary/30 flex items-center justify-center flex-shrink-0 p-4">
-            <LoyaltyStamp filled={false} size={24} icon="coffee" />
+            <LoyaltyStamp filled={false} size={24} />
           </div>
           <div className="flex flex-col items-center">
             <p className="text-md text-primary">No stamps yet</p>
@@ -59,7 +59,7 @@ export function ActivityHistoryEntry({
       </div>
 
       <div className="w-[36px] aspect-square rounded-full bg-primary flex items-center justify-center flex-shrink-0">
-        <LoyaltyStamp filled size={18} icon="coffee" />
+        <LoyaltyStamp filled size={18} />
       </div>
     </div>
   );
