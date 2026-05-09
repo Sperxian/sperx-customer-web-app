@@ -10,10 +10,14 @@ export type MemberLoyalty = {
   shop: {
     id: string;
     name: string;
-    config: Record<string, unknown>;
+    config: ShopConfig;
   },
   dateCreated: Date,
 };
+
+export type ShopConfig = {
+  iconLocation: string;
+}
 
 export type StampBasedConfig = {
   stampIcon: string;
