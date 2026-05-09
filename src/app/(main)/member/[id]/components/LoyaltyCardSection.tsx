@@ -93,8 +93,9 @@ interface LoyaltyCardFrontProps {
 }
 
 export function LoyaltyCardFront({ card }: LoyaltyCardFrontProps) {
-  const remaining = card.totalStamps - card.collectedStamps;
-  const pct = (card.collectedStamps / card.totalStamps) * 100;
+  const trackingPoints = card.collectedStamps % card.totalStamps;
+  const remainingPoints = card.totalStamps - trackingPoints;
+  const remainingPercent = (card.collectedStamps / card.totalStamps) * 100;
 
   return (
     <div className="h-full bg-primary rounded-3xl p-4 relative overflow-hidden flex flex-col">
@@ -107,22 +108,22 @@ export function LoyaltyCardFront({ card }: LoyaltyCardFrontProps) {
           {card.loyaltyProgramName}
         </p>
         <p className="text-xs text-secondary">
-          {Math.trunc(card.collectedStamps)} / {card.totalStamps}
+          {trackingPoints} / {card.totalStamps}
         </p>
       </div>
 
-      <StampGrid total={card.totalStamps} collected={card.collectedStamps} />
+      <StampGrid total={card.totalStamps} collected={trackingPoints} />
 
       <div className="flex items-center gap-2 mt-2.5">
         <div className="flex-1 h-1 bg-secondary-darkest rounded-full overflow-hidden">
           <div
             className="h-full bg-secondary rounded-full transition-all duration-500"
-            style={{ width: `${pct}%` }}
+            style={{ width: `${remainingPercent}%` }}
           />
         </div>
         <span className="text-sm text-secondary font-bold whitespace-nowrap">
-          {remaining > 0
-            ? `${remaining} more for ${card.rewardDescription}`
+          {remainingPoints > 0
+            ? `${remainingPoints} more for ${card.rewardDescription}`
             : `${card.rewardDescription} earned!`}
         </span>
       </div>
