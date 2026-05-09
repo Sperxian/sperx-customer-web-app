@@ -1,7 +1,16 @@
+"use client";
+import { useMemberLoyalty } from "../MemberContext";
+
 export function HowItWorksSection() {
-  const shopName = "Cafe Barako";
-  const goalStamps = 10;
-  const reward = "Free Coffee";
+  const memberLoyalty = useMemberLoyalty();
+  const {
+    shop: { name: shopName },
+    loyaltyProgram: {
+      config: {
+        availableRewards: [{ goalPoints, name: reward }],
+      },
+    },
+  } = memberLoyalty;
 
   const steps = [
     {
@@ -15,7 +24,7 @@ export function HowItWorksSection() {
         "Tap the card above to flip it, then let the staff scan your personal QR code at the counter.",
     },
     {
-      title: `Collect ${goalStamps} stamps`,
+      title: `Collect ${goalPoints} stamps`,
       subtitle:
         "Each scan adds one stamp to your card. Watch them fill up visit by visit.",
     },
