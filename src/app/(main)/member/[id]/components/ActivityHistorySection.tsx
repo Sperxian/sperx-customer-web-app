@@ -45,6 +45,9 @@ export function ActivityHistoryEntry({
   entry,
   isLast,
 }: ActivityHistoryEntryProps) {
+  const { points } = entry;
+  const description = mapDescription(entry);
+
   return (
     <div
       className={`flex justify-between items-center py-2 ${
@@ -52,15 +55,33 @@ export function ActivityHistoryEntry({
       }`}
     >
       <div>
-        <p className="text-sm text-primary">Collected 1 stamp</p>
+        <p className="text-sm text-primary">{description}</p>
         <p className="text-xs text-foreground/50">
           {formatDateTime(entry.dateCreated)}
         </p>
       </div>
 
-      <div className="w-[36px] aspect-square rounded-full bg-primary flex items-center justify-center flex-shrink-0">
-        <LoyaltyStamp filled size={18} />
-      </div>
+      {points > 0 && (
+        <span className="inline-flex gap-1 items-centers text-primary/80">
+          <div className="w-[36px] aspect-square rounded-full bg-primary flex items-center justify-center flex-shrink-0">
+            <LoyaltyStamp filled size={18} />
+          </div>
+        </span>
+      )}
     </div>
   );
 }
+
+const mapDescription = (entry: MemberPointTransaction): string => {
+  const { notes, points } = entry;
+  const wholePoints = Math.trunc(points);
+
+  switch (notes) {
+    case "Accumulation":
+      return `Collected ${wholePoints} ${wholePoints === 1 ? "stamp" : "stamps"}`;
+    case "Redemption":
+      return `Redeemed free reward (${wholePoints} stamps)`;
+    default:
+      return "TODO! Unknown transaction";
+  }
+};
