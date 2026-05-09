@@ -1,5 +1,5 @@
 import { MemberPointsHistory } from "@/types/domain";
-import { MemberPointsTracking } from "@/types/domain";
+import { MemberPointTransaction } from "@/types/domain";
 import { LoyaltyStamp } from "./LoyaltyStamp";
 import { formatDateTime } from "@/lib/utils/date.utils";
 
@@ -37,7 +37,7 @@ export function ActivityHistorySection({ history }: ActivityHistoryProps) {
 }
 
 interface ActivityHistoryEntryProps {
-  entry: MemberPointsTracking;
+  entry: MemberPointTransaction; // Rename to MEmbeRPointsTransaction
   isLast: boolean;
 }
 

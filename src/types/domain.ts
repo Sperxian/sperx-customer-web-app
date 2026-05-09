@@ -32,10 +32,10 @@ export type MemberPointsHistory = {
   page: number;
   size: number;
   total: number;
-  items: MemberPointsTracking[];
+  items: MemberPointTransaction[];
 }
 
-export type MemberPointsTracking = {
+export type MemberPointTransaction = {
   id: string;
   memberId: string;
   points: number;
