@@ -98,21 +98,23 @@ export function LoyaltyCardFront({ card }: LoyaltyCardFrontProps) {
   const remainingPercent = (card.collectedStamps / card.totalStamps) * 100;
 
   return (
-    <div className="h-full bg-primary rounded-3xl p-4 relative overflow-hidden flex flex-col">
+    <div className="h-full bg-primary rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between">
       {/* Decorative circles */}
       <div className="absolute -top-[28px] -right-[28px] w-[90px] h-[90px] rounded-full border-[18px] border-white/5" />
       <div className="absolute bottom-[-18px] left-[18px] w-[55px] h-[55px] rounded-full border-[11px] border-white/5" />
 
-      <div className="flex items-center justify-between uppercase tracking-widest mb-4">
-        <p className="text-xs text-white/50 uppercase">
-          {card.loyaltyProgramName}
-        </p>
-        <p className="text-xs text-secondary">
-          {trackingPoints} / {card.totalStamps}
-        </p>
-      </div>
+      <div>
+        <div className="flex items-center justify-between uppercase tracking-widest mb-4">
+          <p className="text-xs text-white/50 uppercase">
+            {card.loyaltyProgramName}
+          </p>
+          <p className="text-xs text-secondary">
+            {trackingPoints} / {card.totalStamps}
+          </p>
+        </div>
 
-      <StampGrid total={card.totalStamps} collected={trackingPoints} />
+        <StampGrid total={card.totalStamps} collected={trackingPoints} />
+      </div>
 
       <div className="flex items-center gap-2 mt-2.5">
         <div className="flex-1 h-1 bg-secondary-darkest rounded-full overflow-hidden">
@@ -164,16 +166,19 @@ export function StampGrid({ total, collected }: StampGridProps) {
    * - <= 6 stamps => 1 row
    * - > 6 stamps => multiple rows
    */
+  // NOTE: MAX number of stamps should be 15
 
-  const MAX_ITEMS_PER_ROW = 6;
+  const MAX_ITEMS_PER_ROW = 5;
   const rows = Math.ceil(total / MAX_ITEMS_PER_ROW);
   const columns = Math.ceil(total / rows);
 
+  const maxHeight = rows === 1 ? "96px" : rows === 2 ? "72px" : "48px";
+
   return (
     <div
-      className="grid gap-2 justify-around"
+      className="grid gap-2 justify-center"
       style={{
-        gridTemplateColumns: `repeat(${columns}, minmax(32px, 96px))`,
+        gridTemplateColumns: `repeat(${columns}, minmax(12px, ${maxHeight}))`,
       }}
     >
       {Array.from({ length: total }).map((_, i) => {
