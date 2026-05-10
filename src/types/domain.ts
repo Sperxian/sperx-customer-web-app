@@ -10,12 +10,17 @@ export type MemberLoyalty = {
   shop: {
     id: string;
     name: string;
-    config: Record<string, unknown>;
+    config: ShopConfig;
   },
   dateCreated: Date,
 };
 
+export type ShopConfig = {
+  iconLocation: string;
+}
+
 export type StampBasedConfig = {
+  stampIcon: string;
   availableRewards: RewardMetadata[];
 };
 
@@ -31,10 +36,10 @@ export type MemberPointsHistory = {
   page: number;
   size: number;
   total: number;
-  items: MemberPointsTracking[];
+  items: MemberPointTransaction[];
 }
 
-export type MemberPointsTracking = {
+export type MemberPointTransaction = {
   id: string;
   memberId: string;
   points: number;

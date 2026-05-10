@@ -41,7 +41,7 @@ interface LoyaltyCardProps {
 function LoyaltyCard({ card }: LoyaltyCardProps) {
   const [isFlipped, setIsFlipped] = useState(false);
   const hintMessage = (
-    <p className="flex mt-2 text-center text-xs text-primary/80 items-center justify-center gap-[4px]">
+    <p className="flex mt-2 text-center text-xs text-primary/80 items-center justify-center gap-1">
       <InfoIcon size={11} />
       {isFlipped
         ? "Tap the card to see your stamps"
@@ -93,36 +93,39 @@ interface LoyaltyCardFrontProps {
 }
 
 export function LoyaltyCardFront({ card }: LoyaltyCardFrontProps) {
-  const remaining = card.totalStamps - card.collectedStamps;
-  const pct = (card.collectedStamps / card.totalStamps) * 100;
+  const trackingPoints = card.collectedStamps % card.totalStamps;
+  const remainingPoints = card.totalStamps - trackingPoints;
+  const remainingPercent = (card.collectedStamps / card.totalStamps) * 100;
 
   return (
-    <div className="h-full bg-primary rounded-3xl p-4 relative overflow-hidden flex flex-col">
+    <div className="h-full bg-primary rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between">
       {/* Decorative circles */}
       <div className="absolute -top-[28px] -right-[28px] w-[90px] h-[90px] rounded-full border-[18px] border-white/5" />
       <div className="absolute bottom-[-18px] left-[18px] w-[55px] h-[55px] rounded-full border-[11px] border-white/5" />
 
-      <div className="flex items-center justify-between uppercase tracking-widest mb-4">
-        <p className="text-xs text-white/50 uppercase">
-          {card.loyaltyProgramName}
-        </p>
-        <p className="text-xs text-secondary">
-          {Math.trunc(card.collectedStamps)} / {card.totalStamps}
-        </p>
+      <div>
+        <div className="flex items-center justify-between uppercase tracking-widest mb-4">
+          <p className="text-xs text-white/50 uppercase">
+            {card.loyaltyProgramName}
+          </p>
+          <p className="text-xs text-secondary">
+            {trackingPoints} / {card.totalStamps}
+          </p>
+        </div>
+
+        <StampGrid total={card.totalStamps} collected={trackingPoints} />
       </div>
 
-      <StampGrid total={card.totalStamps} collected={card.collectedStamps} />
-
       <div className="flex items-center gap-2 mt-2.5">
-        <div className="flex-1 h-1 bg-[#5C2D0A] rounded-full overflow-hidden">
+        <div className="flex-1 h-1 bg-secondary-darkest rounded-full overflow-hidden">
           <div
-            className="h-full bg-[#C8943A] rounded-full transition-all duration-500"
-            style={{ width: `${pct}%` }}
+            className="h-full bg-secondary rounded-full transition-all duration-500"
+            style={{ width: `${remainingPercent}%` }}
           />
         </div>
         <span className="text-sm text-secondary font-bold whitespace-nowrap">
-          {remaining > 0
-            ? `${remaining} more for ${card.rewardDescription}`
+          {remainingPoints > 0
+            ? `${remainingPoints} more for ${card.rewardDescription}`
             : `${card.rewardDescription} earned!`}
         </span>
       </div>
@@ -159,27 +162,41 @@ interface StampGridProps {
 }
 
 export function StampGrid({ total, collected }: StampGridProps) {
-  // 7 stamps, 1 row
-  // 8 - 14 stamps, 2 rows
-  // 15 - 28 stamps, 3/4 rows
+  /**
+   * - <= 6 stamps => 1 row
+   * - > 6 stamps => multiple rows
+   */
+  // NOTE: MAX number of stamps should be 15
+
+  const MAX_ITEMS_PER_ROW = 5;
+  const rows = Math.ceil(total / MAX_ITEMS_PER_ROW);
+  const columns = Math.ceil(total / rows);
+
+  const maxHeight = rows === 1 ? "96px" : rows === 2 ? "72px" : "48px";
+
   return (
-    <div className={`grid grid-cols-5 gap-2 mb-[14px]`}>
+    <div
+      className="grid gap-2 justify-center"
+      style={{
+        gridTemplateColumns: `repeat(${columns}, minmax(12px, ${maxHeight}))`,
+      }}
+    >
       {Array.from({ length: total }).map((_, i) => {
         const filled = i < collected;
 
         return (
           <div
             key={i}
-            className={`aspect-square rounded-[9px] flex items-center justify-center relative ${
+            className={`aspect-square rounded-xl min-h-12x flex items-center justify-center relative ${
               filled
-                ? "border-[1.5px] border-[#a76eff]/40 bg-[rgba(120,50,200,0.28)]"
-                : "border-[1.5px] border-[#c8a0ff]/25 border-dashed bg-[rgba(255,255,255,0.04)]"
+                ? "border-2 border-primary-lighter bg-primary-light"
+                : "border-2 border-primary-lighter border-dashed bg-primary-darker/20"
             }`}
           >
-            <LoyaltyStamp filled={filled} size={32} icon="coffee" />
+            <LoyaltyStamp filled={filled} size={32} />
 
             {!filled && (
-              <span className="text-[8px] text-[#c8a0ff]/20 absolute bottom-[3px] right-[4px]">
+              <span className="text-[8px] text-white absolute bottom-1 right-1">
                 {i + 1}
               </span>
             )}
