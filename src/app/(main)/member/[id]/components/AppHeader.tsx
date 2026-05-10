@@ -3,17 +3,18 @@ import { useMemberLoyalty } from "@/app/(main)/member/[id]/MemberContext";
 import Image from "next/image";
 
 export function AppHeader() {
-  // TODO Retrieve from S3
-  const iconLocation = "/barako-cafe/icon.svg";
   const {
-    shop: { name: shopName },
+    shop: {
+      name: shopName,
+      config: { iconLocation },
+    },
     loyaltyProgram: { name: loyaltyProgramName },
   } = useMemberLoyalty();
 
   return (
     <header className="flex items-center gap-3 bg-primary px-4 py-3 flex-shrink-0">
       <Image
-        className="dark:invert bg-white rounded-full object-cover"
+        className="aspect-square dark:invert bg-white rounded-full object-scale-down"
         src={iconLocation}
         alt={shopName}
         width={36}
