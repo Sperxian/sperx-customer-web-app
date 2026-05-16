@@ -96,7 +96,7 @@ export default function MemberPage({ params }: PageParams) {
       <div className="absolute bottom-[-18px] left-[18px] w-[180px] h-[180px] rounded-full border-[20px] border-primary/10" />
 
       <Image
-        className="dark:invert bg-white aspect-square object-cover animate-pulse"
+        className="bg-background aspect-square object-cover animate-pulse"
         src={"/sperx-logo.png"}
         alt="Sperx"
         width={120}
