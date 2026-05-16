@@ -25,10 +25,17 @@ export default async function MemberLayout({
         <AppHeader />
 
         <div className="flex-1 relative overflow-hidden">
-          <main className="h-full overflow-y-auto pb-10">{children}</main>
+          <main className="h-full overflow-y-auto bg-background pb-10">
+            {children}
+          </main>
 
           {/* bottom fade indicator */}
-          <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-15 bg-gradient-to-t from-white via-white/75 via-white/30 to-transparent" />
+          <div
+            className={[
+              "pointer-events-none absolute bottom-0 left-0 right-0 h-15",
+              "bg-gradient-to-t from-background via-background/75 via-background/30 to-transparent",
+            ].join(" ")}
+          />
         </div>
       </div>
     </MemberLoyaltyContextProvider>

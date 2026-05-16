@@ -41,7 +41,7 @@ interface LoyaltyCardProps {
 function LoyaltyCard({ card }: LoyaltyCardProps) {
   const [isFlipped, setIsFlipped] = useState(false);
   const hintMessage = (
-    <p className="flex mt-2 text-center text-xs text-primary/80 items-center justify-center gap-1">
+    <p className="flex mt-2 text-center text-xs text-primary-lighter items-center justify-center gap-1">
       <InfoIcon size={11} />
       {isFlipped
         ? "Tap the card to see your stamps"
@@ -105,7 +105,7 @@ export function LoyaltyCardFront({ card }: LoyaltyCardFrontProps) {
 
       <div>
         <div className="flex items-center justify-between uppercase tracking-widest mb-4">
-          <p className="text-xs text-white/50 uppercase">
+          <p className="text-xs text-white uppercase">
             {card.loyaltyProgramName}
           </p>
           <p className="text-xs text-secondary">
@@ -143,7 +143,7 @@ export function LoyaltyCardBack({ card }: LoyaltyCardBackProps) {
       {/* Decorative circle */}
       <div className="absolute -top-[28px] -left-[28px] w-[90px] h-[90px] rounded-full border-[18px] border-white/5" />
 
-      <p className="text-xs text-white/50 uppercase tracking-widest mb-4">
+      <p className="text-xs text-white uppercase tracking-widest mb-4">
         {card.loyaltyProgramName}
       </p>
 
@@ -151,7 +151,7 @@ export function LoyaltyCardBack({ card }: LoyaltyCardBackProps) {
         <QrCode data={card.memberId} size={140} color="var(--primary)" />
       </div>
 
-      <p className="text-xs text-white/50">{card.memberId}</p>
+      <p className="text-xs text-white">{card.memberId}</p>
     </div>
   );
 }
