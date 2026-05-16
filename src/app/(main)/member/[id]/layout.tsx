@@ -21,7 +21,7 @@ export default async function MemberLayout({
 
   return (
     <MemberLoyaltyContextProvider value={memberLoyalty}>
-      <div className="w-full md:max-w-md h-full md:h-[90vh] md:my-6 md:rounded-2xl bg-white shadow flex flex-col overflow-hidden">
+      <div className="w-full md:max-w-md h-full md:h-[90vh] md:my-6 md:rounded-2xl md:border md:border-gray-400 md:dark:border-gray-800 shadow flex flex-col overflow-hidden">
         <AppHeader />
 
         <div className="flex-1 relative overflow-hidden">
