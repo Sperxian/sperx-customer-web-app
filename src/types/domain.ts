@@ -17,6 +17,7 @@ export type MemberLoyalty = {
 
 export type ShopConfig = {
   iconLocation: string;
+  theme?: ThemeColors;
 }
 
 export type StampBasedConfig = {
@@ -29,6 +30,27 @@ export type RewardMetadata = {
   name: string;
   description?: string;
   goalPoints: number;
+};
+
+export type ThemeColors = {
+  background?: string;
+  foreground?: string;
+  primary?: string;
+  primaryLightest?: string;
+  primaryLighter?: string;
+  primaryLight?: string;
+  primaryDark?: string;
+  primaryDarker?: string;
+  primaryDarkest?: string;
+  primaryForeground?: string;
+  secondary?: string;
+  secondaryLightest?: string;
+  secondaryLighter?: string;
+  secondaryLight?: string;
+  secondaryDark?: string;
+  secondaryDarker?: string;
+  secondaryDarkest?: string;
+  secondaryForeground?: string;
 };
 
 
