@@ -25,8 +25,8 @@ export function ActivityHistorySection({ history }: ActivityHistoryProps) {
             <LoyaltyStamp filled={false} size={24} />
           </div>
           <div className="flex flex-col items-center">
-            <p className="text-md text-primary">No stamps yet</p>
-            <p className="text-xs text-foreground/50">
+            <p className="text-md text-primary dark:text-primary-lighter">No stamps yet</p>
+            <p className="text-xs text-foreground/60">
               Your activity will appear here after your first stamp.
             </p>
           </div>
@@ -55,7 +55,7 @@ export function ActivityHistoryEntry({
       }`}
     >
       <div>
-        <p className="text-sm text-primary">{description}</p>
+        <p className="text-sm text-primary dark:text-primary-lighter">{description}</p>
         <p className="text-xs text-foreground/50">
           {formatDateTime(entry.dateCreated)}
         </p>

@@ -46,7 +46,7 @@ export function HowItWorksSection() {
                 {index + 1}
               </div>
               <div className="flex flex-col items-start justify-center">
-                <p className="text-sm text-primary">{step.title}</p>
+                <p className="text-sm text-primary dark:text-primary-lighter">{step.title}</p>
                 <p className="text-xs text-foreground/60">{step.subtitle}</p>
               </div>
             </div>
