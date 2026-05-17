@@ -33,8 +33,6 @@ export type RewardMetadata = {
 };
 
 export type ThemeColors = {
-  background?: string;
-  foreground?: string;
   primary?: string;
   primaryLightest?: string;
   primaryLighter?: string;
