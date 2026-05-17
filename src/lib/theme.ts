@@ -4,8 +4,6 @@ import type { CSSProperties } from "react";
 
 export function themeCssVars(theme: ThemeColors): CSSProperties {
   return {
-    "--background": theme.background,
-    "--foreground": theme.foreground,
     "--primary": theme.primary,
     "--primary-lightest": theme.primaryLightest,
     "--primary-lighter": theme.primaryLighter,
