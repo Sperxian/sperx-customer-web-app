@@ -15,6 +15,8 @@
   --primary-darker: #14042e;
   --primary-darkest: #0b021a;
 
+  --primary-foreground: #ffffff;
+
   /* SECONDARY */
   --secondary: #ffb800;
 
@@ -25,6 +27,8 @@
   --secondary-dark: #d69500;
   --secondary-darker: #a37100;
   --secondary-darkest: #6b4a00;
+
+  --secondary-foreground: #000000;
 }
 
 @theme inline {
@@ -55,7 +59,16 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    --primary-foreground: #000000;
+    --secondary-foreground: #000000;
   }
+}
+
+.dark {
+  --background: #ededed;
+  --foreground: #0a0a0a;
+  --primary-foreground: #000000;
+  --secondary-foreground: #000000;
 }
 
 body {
