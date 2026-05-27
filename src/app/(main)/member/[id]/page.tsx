@@ -8,9 +8,11 @@ import { getMemberPointsHistory } from "@/lib/api/member";
 import { useMemberLoyalty } from "./MemberContext";
 import { useEffect, useState } from "react";
 import { MemberPointsHistory } from "@/types/domain";
+import { SignUpButton, useUser } from "@clerk/nextjs";
 
 export default function MemberPage() {
   const memberLoyalty = useMemberLoyalty();
+  const { isSignedIn } = useUser();
   const [history, setHistory] = useState<MemberPointsHistory | null>();
 
   useEffect(() => {
@@ -22,16 +24,19 @@ export default function MemberPage() {
     fetchHistory();
   }, [memberLoyalty]);
 
-  const showSignUpReminder = memberLoyalty.points >= 2;
+  const showSignUpReminder = isSignedIn === false && memberLoyalty.points >= 2;
+
   const signUpReminder = (
     <Alert
       variant="warning"
       message="Guest accounts are stored only on this device. Secure your stamps with an account."
       actionSlot={
         <div className="flex gap-4 justify-end">
-          <button className="text-primary font-bold underline mt-1 capitalize">
-            Sign up
-          </button>
+          <SignUpButton mode="modal">
+            <button className="text-primary font-bold underline mt-1 capitalize">
+              Sign up
+            </button>
+          </SignUpButton>
         </div>
       }
     />
