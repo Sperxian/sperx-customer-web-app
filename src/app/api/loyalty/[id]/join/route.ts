@@ -5,13 +5,13 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const { id: loyaltyId } = await params
   const guestId = req.cookies.get(SPX_GUEST_COOKIE_NAME)?.value;
 
   try {
-    const headers = { SPX_GUEST_HEADER_NAME: guestId }
+    const headers = { [SPX_GUEST_HEADER_NAME]: guestId }
     const { data } = await apiClient.post<MemberLoyalty>(`/customer/loyalty/${loyaltyId}`, {}, { headers });
 
     return NextResponse.json(data);
