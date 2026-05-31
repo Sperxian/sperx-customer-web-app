@@ -1,35 +1,42 @@
-import { NextResponse, type NextRequest } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import { randomUUID } from "crypto";
-import { SPX_GUEST_COOKIE_NAME } from "./lib/services/client/guest";
+import { SPX_GUEST_COOKIE_NAME } from "./lib/services/guest";
 
 export default function proxy(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
   const response = NextResponse.next()
 
-  // Will specialize to loyalty page if matcher generalizes to all path
-  setGuestCookie(request, response)
+  if (pathname.startsWith('/loyalty')) {
+    // or matches with loyalty/id
+    setGuestCookie(request, response)
+  }
 
   return response;
 }
 
 export const config = {
-  matcher: "/loyalty/:id/:path*",
+  matcher: [
+    // Skip Next.js internals and all static files, unless found in search params
+    '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
+    // Always run for API routes
+    '/(api|trpc)(.*)',
+    // Always run for Clerk-specific frontend API routes
+    '/__clerk/(.*)',
+  ]
 };
 
 const setGuestCookie = (request: NextRequest, response: NextResponse) => {
   const guestCookie = request.cookies.get(SPX_GUEST_COOKIE_NAME)
   if (!guestCookie) {
     const guestId = randomUUID();
-    const data = JSON.stringify({
-      id: guestId,
-      dateCreated: new Date(),
-    })
     console.debug(`Registering guest account ${guestId}`)
 
     response.cookies.set({
       name: SPX_GUEST_COOKIE_NAME,
-      value: data,
+      value: guestId,
       httpOnly: true,
-      // domain (from env)
+      // TODO: domain (from env)
       secure: true,
       sameSite: "lax",
       path: "/",
