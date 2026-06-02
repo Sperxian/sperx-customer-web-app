@@ -36,7 +36,6 @@ const setGuestCookie = (request: NextRequest, response: NextResponse) => {
       name: SPX_GUEST_COOKIE_NAME,
       value: guestId,
       httpOnly: true,
-      // TODO: domain (from env)
       secure: true,
       sameSite: "lax",
       path: "/",
