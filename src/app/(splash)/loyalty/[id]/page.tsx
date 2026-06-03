@@ -1,6 +1,6 @@
 "use client";
 
-import { createMemberLoyalty } from "@/lib/api/member";
+import { createMemberLoyalty } from "@/lib/services/member";
 import { LoaderCircleIcon } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -40,7 +40,6 @@ const PAGE_STATE_METADATA = {
 
 export default function MemberPage({ params }: PageParams) {
   const router = useRouter();
-
   const [state, setState] = useState<PAGE_STATE>("UNMOUNTED");
   const { id: programId } = use(params);
 
@@ -64,12 +63,12 @@ export default function MemberPage({ params }: PageParams) {
         setTimeout(createMember, timeoutMs);
       }
     };
-    
+
     const createMember = async () => {
       setState("CREATING");
-      const { id: memberId, dateCreated: dateJoined } =
-        await createMemberLoyalty(programId);
-      console.debug(`Created new member ID: ${memberId}`);
+      const newMember = await createMemberLoyalty(programId);
+      const { id: memberId, dateCreated: dateJoined } = newMember;
+      console.log(`Created new member ID: ${memberId}`);
 
       const newMemberData = {
         memberId,
