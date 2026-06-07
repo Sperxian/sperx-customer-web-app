@@ -2,7 +2,6 @@ import "@/app/globals.css";
 import { AppHeader } from "@/app/(main)/member/[id]/components/AppHeader";
 import { getMemberLoyalty } from "@/lib/api/member";
 import { MemberLoyaltyContextProvider } from "./MemberContext";
-import { themeCssVars } from "@/lib/theme";
 import ClerkProviderWrapper from "../ClerkProviderWrapper";
 import { notFound } from "next/navigation";
 
@@ -21,25 +20,11 @@ export default async function MemberLayout({
     return notFound();
   }
 
-  const { theme } = memberLoyalty.shop.config;
-  const themeVars = theme ? themeCssVars(theme) : undefined;
-
   return (
     <ClerkProviderWrapper>
       <MemberLoyaltyContextProvider value={memberLoyalty}>
-        <AppHeader style={themeVars} />
-
-        <div className="flex-1 relative overflow-hidden" style={themeVars}>
-          <main className="h-full overflow-y-auto">{children}</main>
-
-          {/* bottom fade indicator */}
-          <div
-            className={[
-              "pointer-events-none absolute bottom-0 left-0 right-0 h-15",
-              "bg-gradient-to-t from-background via-background/75 via-background/30 to-transparent",
-            ].join(" ")}
-          />
-        </div>
+        <AppHeader/>
+        {children}
       </MemberLoyaltyContextProvider>
     </ClerkProviderWrapper>
   );
