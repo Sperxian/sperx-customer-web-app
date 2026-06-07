@@ -4,6 +4,7 @@ import { getMemberLoyalty } from "@/lib/api/member";
 import { MemberLoyaltyContextProvider } from "./MemberContext";
 import { themeCssVars } from "@/lib/theme";
 import ClerkProviderWrapper from "../ClerkProviderWrapper";
+import { notFound } from "next/navigation";
 
 export default async function MemberLayout({
   children,
@@ -17,8 +18,7 @@ export default async function MemberLayout({
   const { id: memberId } = await params;
   const memberLoyalty = await getMemberLoyalty(memberId);
   if (!memberLoyalty) {
-    // TODO: Redirect to not found
-    throw new Error("Member not found!");
+    return notFound();
   }
 
   const { theme } = memberLoyalty.shop.config;
