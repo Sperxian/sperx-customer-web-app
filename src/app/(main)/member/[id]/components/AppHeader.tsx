@@ -2,8 +2,13 @@
 import { useMemberLoyalty } from "@/app/(main)/member/[id]/MemberContext";
 import { UserButton } from "@clerk/nextjs";
 import Image from "next/image";
+import { CSSProperties } from "react";
 
-export function AppHeader() {
+interface AppHeaderProps {
+  style?: CSSProperties;
+}
+
+export function AppHeader({ style }: AppHeaderProps) {
   const {
     shop: {
       name: shopName,
@@ -13,7 +18,10 @@ export function AppHeader() {
   } = useMemberLoyalty();
 
   return (
-    <header className="flex items-center justify-between gap-3 bg-primary px-4 py-3 flex-shrink-0">
+    <header
+      className="flex items-center justify-between gap-3 bg-primary px-4 py-3 flex-shrink-0"
+      style={style}
+    >
       <div className="flex items-center gap-3 flex-shrink-0">
         <Image
           className="aspect-square bg-white rounded-full object-scale-down"

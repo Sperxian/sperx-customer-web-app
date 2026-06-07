@@ -82,7 +82,7 @@ export default function MemberPage({ params }: PageParams) {
     const redirectToMemberPage = (memberId: string) => {
       setState("REDIRECTING");
       const memberPage = `/member/${memberId}`;
-      // router.replace(memberPage);
+      router.replace(memberPage);
     };
 
     setTimeout(checkLocalMember, 0);
