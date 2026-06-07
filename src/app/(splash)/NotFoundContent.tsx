@@ -2,13 +2,13 @@
 
 import "@/app/globals.css";
 import SplashPageTemplate from "./SplashPageTemplate";
-import { HomeIcon, ShieldQuestionIcon } from "lucide-react";
+import { MoveLeftIcon, ShieldQuestionIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export default function NotFoundContent() {
   const router = useRouter();
-  const goHome = () => {
-    router.push("/");
+  const goBack = () => {
+    router.back();
   };
 
   return (
@@ -27,20 +27,18 @@ export default function NotFoundContent() {
               in the first place.
             </span>
           </div>
-          <ShieldQuestionIcon
-            className="w-[150px] h-[150px] md:w-[200px] md:h-[200px] text-primary dark:text-primary-lighter"
-          />
+          <ShieldQuestionIcon className="w-[150px] h-[150px] md:w-[200px] md:h-[200px] text-primary dark:text-primary-lighter" />
         </div>
       }
-      // actionSlot={
-      //   <button
-      //     className="bg-primary hover:bg-primary/80 text-white p-4 rounded-lg w-full inline-flex items-center justify-center gap-2"
-      //     onClick={goHome}
-      //   >
-      //     <HomeIcon size={18} />
-      //     Return Home
-      //   </button>
-      // }
+      actionSlot={
+        <button
+          className="bg-primary hover:bg-primary/80 text-white p-4 rounded-lg w-full inline-flex items-center justify-center gap-2"
+          onClick={goBack}
+        >
+          <MoveLeftIcon size={18} />
+          Go back
+        </button>
+      }
     />
   );
 }
