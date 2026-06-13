@@ -1,3 +1,5 @@
+import { getToken } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 import axios, { AxiosInstance } from "axios";
 
 /**
@@ -32,13 +34,20 @@ const apiClient: AxiosInstance = axios.create({
  * Request interceptor - add auth tokens or other headers
  */
 apiClient.interceptors.request.use(
-  (config) => {
-    // Add any request-level configuration here
-    // Example: add auth token
-    // const token = localStorage.getItem('authToken');
-    // if (token) {
-    //   config.headers.Authorization = `Bearer ${token}`;
-    // }
+  async (config) => {
+    let token;
+    if (typeof window === "undefined") {
+      // in server components or server-side code
+      const { getToken: serverSideGetToken } = await auth();
+      token = await serverSideGetToken();
+    } else {
+      // in client-side code
+      token = await getToken();
+    }
+
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
     return config;
   },
   (error) => {
