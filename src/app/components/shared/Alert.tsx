@@ -31,6 +31,7 @@ const variantConfig = {
 };
 
 type AlertProps = {
+  title: string;
   message: string;
   variant?: Variant;
   className?: string;
@@ -38,6 +39,7 @@ type AlertProps = {
 };
 
 export function Alert({
+  title,
   message,
   variant = "warning",
   className = "",
@@ -57,7 +59,7 @@ export function Alert({
         <Icon className="text-white" />
       </div>
       <div className="flex flex-col">
-        <span className="text-md font-bold">Keep your loyalty progress safe</span>
+        <span className="text-md font-bold">{title}</span>
         <span className="text-xs font-medium">{message}</span>
 
         {actionSlot && <div className="mt-2">{actionSlot}</div>}

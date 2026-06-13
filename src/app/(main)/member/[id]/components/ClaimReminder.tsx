@@ -35,6 +35,7 @@ export default function ClaimReminder({ memberLoyalty }: Props) {
   return (
     <Alert
       variant="warning"
+      title="Keep your loyalty progress safe"
       message={metadata.message}
       actionSlot={
         <div className="flex gap-4 justify-end">
