@@ -43,7 +43,7 @@ export default function ClaimReminder({ memberLoyalty }: Props) {
             mode="modal"
             forceRedirectUrl={`/member/${memberLoyalty.id}/claim`}
           >
-            <button className="text-primary font-bold underline mt-1 capitalize">
+            <button className="text-primary dark:text-primary-lighter font-bold underline mt-1 capitalize">
               {metadata.actionText}
             </button>
           </SignUpButton>

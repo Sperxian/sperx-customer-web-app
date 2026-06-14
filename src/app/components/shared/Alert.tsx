@@ -50,7 +50,7 @@ export function Alert({
   return (
     <div
       className={[
-        "border border-2 rounded-2xl p-2 flex items-start gap-2 text-sm font-medium",
+        "w-full border border-2 rounded-2xl p-2 flex items-start gap-2 text-sm font-medium",
         container,
         className,
       ].join(" ")}
@@ -58,11 +58,11 @@ export function Alert({
       <div className={`aspect-square p-1.5 rounded-lg ${iconBg}`}>
         <Icon className="text-white" />
       </div>
-      <div className="flex flex-col">
+      <div className=" w-full flex flex-col">
         <span className="text-md font-bold">{title}</span>
-        <span className="text-xs font-medium">{message}</span>
+        <span className="w-full text-xs font-medium">{message}</span>
 
-        {actionSlot && <div className="mt-2">{actionSlot}</div>}
+        {actionSlot && <div className="mt-2 pr-4">{actionSlot}</div>}
       </div>
     </div>
   );
