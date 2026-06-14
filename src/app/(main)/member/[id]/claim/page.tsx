@@ -6,18 +6,16 @@ import { LinkIcon, LoaderCircleIcon } from "lucide-react";
 import { notFound, useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { Alert } from "@/app/components/shared/Alert";
+import { useMemberLoyalty } from "../MemberContext";
 
 export default function ClaimMemberLoyaltyPage() {
   const { id: memberId } = useParams();
+  const memberLoyalty = useMemberLoyalty();
   const router = useRouter();
-
   const { isLoaded: isUserLoaded, isSignedIn, user } = useUser();
+
   const [isLinking, setIsLinking] = useState(false);
   const [linkError, setLinkError] = useState<string>();
-
-  if (isUserLoaded && !isSignedIn) {
-    return notFound();
-  }
 
   const email = user?.primaryEmailAddress?.toString();
 
@@ -31,7 +29,7 @@ export default function ClaimMemberLoyaltyPage() {
       const data = await response.json();
 
       if (response.ok) {
-        router.replace(`/member/${memberId}`);
+        goToMemberPage();
         return;
       }
 
@@ -41,9 +39,25 @@ export default function ClaimMemberLoyaltyPage() {
     }
   };
 
+  const goToMemberPage = () => {
+    router.replace(`/member/${memberId}`);
+  };
+
   const goBack = () => {
     router.back();
   };
+
+  if (memberLoyalty.isClaimed) {
+    return goToMemberPage();
+  }
+
+  if (!isUserLoaded) {
+    return <LoaderCircleIcon className="animate-spin" />;
+  }
+
+  if (!isSignedIn) {
+    return notFound();
+  }
 
   return (
     <div className="h-full flex flex-col gap-4 p-4">
