@@ -8,16 +8,16 @@ export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id: loyaltyId } = await params
+  const { id: memberId } = await params
   const guestId = req.cookies.get(SPX_GUEST_COOKIE_NAME)?.value;
 
   try {
     const headers = { [SPX_GUEST_HEADER_NAME]: guestId }
-    const { data } = await apiClient.post<MemberLoyalty>(`/customer/loyalty/${loyaltyId}`, {}, { headers });
+    const { data } = await apiClient.post<MemberLoyalty>(`/customer/members/${memberId}/loyalty/claim`, {}, { headers });
 
     return NextResponse.json(data);
   } catch (error) {
-    console.error('Failed to create new member loyalty', error);
+    console.error('Failed to claim member', error)
     if (axios.isAxiosError(error) && error.response) {
       return NextResponse.json(
         error.response.data,

@@ -1,8 +1,9 @@
 import { NextResponse, NextRequest } from "next/server";
 import { randomUUID } from "crypto";
 import { SPX_GUEST_COOKIE_NAME } from "./lib/services/guest";
+import { clerkMiddleware } from "@clerk/nextjs/server";
 
-export default function proxy(request: NextRequest) {
+const proxy = clerkMiddleware((_auth, request: NextRequest) => {
   const { pathname } = request.nextUrl;
 
   const response = NextResponse.next()
@@ -13,7 +14,7 @@ export default function proxy(request: NextRequest) {
   }
 
   return response;
-}
+})
 
 export const config = {
   matcher: [
@@ -54,3 +55,4 @@ const setGuestCookie = (request: NextRequest, response: NextResponse) => {
 //     await auth.protect();
 //   }
 // })
+export default proxy;
