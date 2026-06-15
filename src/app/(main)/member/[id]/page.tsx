@@ -23,7 +23,9 @@ export default function MemberPage() {
       setHistory(data);
     }
 
-    fetchHistory();
+    if (memberLoyalty) {
+      fetchHistory();
+    }
   }, [memberLoyalty]);
 
   return (
