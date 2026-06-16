@@ -2,7 +2,8 @@ import "@/app/globals.css";
 import { AppHeader } from "@/app/(main)/member/[id]/components/AppHeader";
 import { getMemberLoyalty } from "@/lib/api/member";
 import { MemberLoyaltyContextProvider } from "./MemberContext";
-import { themeCssVars } from "@/lib/theme";
+import ClerkProviderWrapper from "../ClerkProviderWrapper";
+import { notFound } from "next/navigation";
 
 export default async function MemberLayout({
   children,
@@ -16,37 +17,15 @@ export default async function MemberLayout({
   const { id: memberId } = await params;
   const memberLoyalty = await getMemberLoyalty(memberId);
   if (!memberLoyalty) {
-    // TODO: Redirect to not found
-    throw new Error("Member not found!");
+    return notFound();
   }
 
-  const { theme } = memberLoyalty.shop.config;
-
-  const themeVars = theme ? themeCssVars(theme) : undefined;
-
   return (
-    <html lang="en" className={`h-full antialiased`} style={themeVars}>
-      <body className="h-full bg-gray-100 flex justify-center">
-        <MemberLoyaltyContextProvider value={memberLoyalty}>
-          <div className="w-full md:max-w-md h-full md:h-[90vh] md:my-6 md:rounded-2xl md:border md:border-gray-400 md:dark:border-gray-800 shadow flex flex-col overflow-hidden">
-            <AppHeader />
-
-            <div className="flex-1 relative overflow-hidden">
-              <main className="h-full overflow-y-auto bg-background pb-10">
-                {children}
-              </main>
-
-              {/* bottom fade indicator */}
-              <div
-                className={[
-                  "pointer-events-none absolute bottom-0 left-0 right-0 h-15",
-                  "bg-gradient-to-t from-background via-background/75 via-background/30 to-transparent",
-                ].join(" ")}
-              />
-            </div>
-          </div>
-        </MemberLoyaltyContextProvider>
-      </body>
-    </html>
+    <ClerkProviderWrapper>
+      <MemberLoyaltyContextProvider value={memberLoyalty}>
+        <AppHeader/>
+        {children}
+      </MemberLoyaltyContextProvider>
+    </ClerkProviderWrapper>
   );
 }

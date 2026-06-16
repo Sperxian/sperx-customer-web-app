@@ -12,6 +12,7 @@ export type MemberLoyalty = {
     name: string;
     config: ShopConfig;
   },
+  isClaimed: boolean;
   dateCreated: Date,
 };
 
