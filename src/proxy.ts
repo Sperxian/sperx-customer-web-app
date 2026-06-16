@@ -44,15 +44,5 @@ const setGuestCookie = (request: NextRequest, response: NextResponse) => {
     });
   }
 }
-// import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
 
-// const isPublicRoute = createRouteMatcher([
-//   '/member(.*)',
-// ])
-
-// export default clerkMiddleware(async (auth, req) => {
-//   if (!isPublicRoute(req)) {
-//     await auth.protect();
-//   }
-// })
 export default proxy;
