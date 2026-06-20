@@ -1,7 +1,7 @@
 "use client";
 import { useMemberLoyalty } from "@/app/(main)/member/[id]/MemberContext";
 import { themeCssVars } from "@/lib/theme";
-import { UserButton } from "@clerk/nextjs";
+import { SignInButton, UserButton, useUser } from "@clerk/nextjs";
 import Image from "next/image";
 
 export function AppHeader() {
@@ -12,6 +12,7 @@ export function AppHeader() {
     },
     loyaltyProgram: { name: loyaltyProgramName },
   } = useMemberLoyalty();
+  const { isLoaded: isUserLoaded, isSignedIn } = useUser();
 
   const themeVars = theme ? themeCssVars(theme) : undefined;
 
@@ -39,7 +40,14 @@ export function AppHeader() {
           </p>
         </div>
       </div>
-      <UserButton />
+      {isUserLoaded && isSignedIn && <UserButton />}
+      {isUserLoaded && !isSignedIn && (
+        <SignInButton mode="modal">
+          <button className="bg-secondary text-white rounded-2xl px-4 py-1 capitalize">
+            Sign in
+          </button>
+        </SignInButton>
+      )}
     </header>
   );
 }
