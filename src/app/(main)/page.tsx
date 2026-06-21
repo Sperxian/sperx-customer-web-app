@@ -1,7 +1,10 @@
+"use client";
+
 import { ChevronRightIcon } from "lucide-react";
 import { LoyaltyStamp } from "./member/[id]/components/LoyaltyStamp";
 import { themeCssVars } from "@/lib/theme";
 import "@/app/globals.css";
+import { SignInButton, UserButton, useUser } from "@clerk/nextjs";
 
 type LoyaltyOverviewCardProps = {
   id: string;
@@ -33,6 +36,8 @@ type LoyaltyOverviewCardProps = {
 };
 
 export default function IndexPage() {
+  const { isLoaded: isUserLoaded, isSignedIn, user } = useUser();
+
   const loyaltyCards: LoyaltyOverviewCardProps[] = [
     {
       id: "id-2",
@@ -74,13 +79,27 @@ export default function IndexPage() {
     },
   ];
 
+  console.log({ user });
+
   return (
-    <div className="flex flex-col p-4 pt-8 gap-4">
-      {/* Div Clss Header */}
-      <div>
-        <button className="bg-primary text-white rounded-2xl px-4 py-1 capitalize">
-          Sign in
-        </button>
+    <div className="flex flex-col p-4 gap-4">
+      {/* App Header */}
+      <div className="flex justify-end">
+        {isUserLoaded && isSignedIn && (
+          <div className="flex items-center gap-2">
+            <p className="font-bold text-primary">
+              {user.fullName ?? user.primaryEmailAddress?.emailAddress}
+            </p>
+          </div>
+            <UserButton />
+        )}
+        {isUserLoaded && !isSignedIn && (
+          <SignInButton mode="modal">
+            <button className="bg-primary text-white rounded-2xl px-4 py-1 capitalize">
+              Sign in
+            </button>
+          </SignInButton>
+        )}
       </div>
 
       {/* List of Loyalty Cards */}
