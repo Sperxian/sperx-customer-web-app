@@ -22,6 +22,16 @@ export async function getMemberLoyalty(memberId: string): Promise<MemberLoyalty 
   }
 }
 
+export async function getAllMemberLoyalties(): Promise<MemberLoyalty[]> {
+  try {
+    const response = await apiClient.get<MemberLoyalty[]>(`/customer/members`);
+    return response.data;
+  } catch (error) {
+    console.error("Failed to fetch member loyalties of user:", error);
+    return [];
+  }
+}
+
 export async function getMemberPointsHistory(memberId: string, page: number = 0, size: number = 20): Promise<MemberPointsHistory | null> {
   const params = { page, size };
   try {
