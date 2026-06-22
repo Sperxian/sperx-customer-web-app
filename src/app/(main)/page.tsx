@@ -1,13 +1,14 @@
 "use client";
 
 import { LoaderCircleIcon } from "lucide-react";
-import { SignInButton, UserButton, useUser } from "@clerk/nextjs";
+import { SignInButton, SignUpButton, UserButton, useUser } from "@clerk/nextjs";
 import { fetchGuestMemberLoyalties } from "@/lib/services/guest";
 import { useEffect, useState } from "react";
 import { MemberLoyalty } from "@/types/domain";
 import { getAllMemberLoyalties } from "@/lib/api/member";
 import LoyaltyOverviewCard from "./components/LoyaltyOverviewCard";
 import "@/app/globals.css";
+import { Alert } from "../components/shared/Alert";
 
 export default function IndexPage() {
   const { isLoaded: isUserLoaded, isSignedIn, user } = useUser();
@@ -63,9 +64,39 @@ export default function IndexPage() {
             />
           </div>
         ) : (
-          <LoyaltyOverviewList cards={loyaltyCards} />
+          <div className="flex flex-col gap-2">
+            {!isSignedIn && <ClaimReminder />}
+            <LoyaltyOverviewList cards={loyaltyCards} />
+          </div>
         )}
       </div>
+    </div>
+  );
+}
+
+function ClaimReminder() {
+  return (
+    <div className="flex gap-4 justify-end">
+      <Alert
+        variant="warning"
+        title="Keep your loyalty progress safe"
+        message="Guest accounts are stored only on this device. Secure your stamps with an account."
+        actionSlot={
+          <div className="flex gap-4 justify-end items-center mt-1">
+            <SignUpButton mode="modal">
+              <button className="text-primary dark:text-primary-lighter font-bold underline capitalize">
+                Sign up
+              </button>
+            </SignUpButton>
+            <p>or</p>
+            <SignInButton>
+              <button className="text-primary dark:text-primary-lighter font-bold underline capitalize">
+                Sign in
+              </button>
+            </SignInButton>
+          </div>
+        }
+      />
     </div>
   );
 }
