@@ -11,7 +11,7 @@ import { removeGuestMemberLoyalty } from "@/lib/services/guest";
 
 export default function ClaimMemberLoyaltyPage() {
   const { id: memberId } = useParams();
-  const { memberLoyalty } = useMemberLoyalty();
+  const { memberLoyalty, refresh: refreshMemberLoyalty } = useMemberLoyalty();
   const router = useRouter();
   const { isLoaded: isUserLoaded, isSignedIn, user } = useUser();
 
@@ -31,6 +31,7 @@ export default function ClaimMemberLoyaltyPage() {
 
       if (response.ok) {
         removeGuestMemberLoyalty(memberId as string);
+        refreshMemberLoyalty();
         goToMemberPage();
         return;
       }
