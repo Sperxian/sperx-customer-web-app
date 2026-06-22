@@ -1,85 +1,35 @@
 "use client";
 
-import { ChevronRightIcon } from "lucide-react";
+import { ChevronRightIcon, LoaderCircleIcon, X } from "lucide-react";
 import { LoyaltyStamp } from "./member/[id]/components/LoyaltyStamp";
 import { themeCssVars } from "@/lib/theme";
-import "@/app/globals.css";
 import { SignInButton, UserButton, useUser } from "@clerk/nextjs";
-
-type LoyaltyOverviewCardProps = {
-  id: string;
-  shopName: string;
-  icon: string;
-  progressPercent: number;
-  currentPoints: number;
-  goalPoints: number;
-  remainingPoints: number;
-  styles?: {
-    primary: string;
-    primaryLight: string;
-    primaryLighter: string;
-    secondary: string;
-    secondaryDarkest: string;
-
-    primaryDark: string;
-    primaryDarker: string;
-    secondaryDark: string;
-    primaryDarkest: string;
-    secondaryLight: string;
-    primaryLightest: string;
-    secondaryDarker: string;
-    secondaryLighter: string;
-    primaryForeground: string;
-    secondaryLightest: string;
-    secondaryForeground: string;
-  };
-};
+import { fetchGuestMemberLoyalties } from "@/lib/services/guest";
+import { useEffect, useState } from "react";
+import { MemberLoyalty } from "@/types/domain";
+import { getAllMemberLoyalties } from "@/lib/api/member";
+import "@/app/globals.css";
 
 export default function IndexPage() {
   const { isLoaded: isUserLoaded, isSignedIn, user } = useUser();
+  const [loyaltyCards, setLoyaltyCards] = useState<MemberLoyalty[]>([]);
 
-  const loyaltyCards: LoyaltyOverviewCardProps[] = [
-    {
-      id: "id-2",
-      shopName: "Cloud Scoop",
-      icon: "ice_cream2",
-      progressPercent: 37.5,
-      currentPoints: 3,
-      goalPoints: 8,
-      remainingPoints: 5,
-      styles: {
-        primary: "#be123c",
-        primaryLight: "#e11d48",
-        primaryLighter: "#fb7185",
+  useEffect(() => {
+    if (!isUserLoaded) return;
 
-        secondary: "#3c0bc4",
-        secondaryDarkest: "#05070d",
+    (async () => {
+      try {
+        const data = isSignedIn
+          ? await getAllMemberLoyalties()
+          : await fetchGuestMemberLoyalties();
 
-        primaryDark: "#9f1239",
-        primaryDarker: "#7f0c29",
-        secondaryDark: "#0b1220",
-        primaryDarkest: "#4a0418",
-        secondaryLight: "#475569",
-        primaryLightest: "#ffe4e6",
-        secondaryDarker: "#080d18",
-        secondaryLighter: "#94a3b8",
-        primaryForeground: "#ffffff",
-        secondaryLightest: "#cbd5e1",
-        secondaryForeground: "#ffffff",
-      },
-    },
-    {
-      id: "s",
-      shopName: "Café Barakoo",
-      icon: "coffee",
-      progressPercent: 80,
-      currentPoints: 8,
-      goalPoints: 10,
-      remainingPoints: 2,
-    },
-  ];
-
-  console.log({ user });
+        setLoyaltyCards(data);
+      } catch (error) {
+        // TODO: Add error alert message
+        console.error("Failed to load loyalty cards", error);
+      }
+    })();
+  }, [isUserLoaded, isSignedIn]);
 
   return (
     <div className="flex flex-col p-4 gap-4">
@@ -90,8 +40,8 @@ export default function IndexPage() {
             <p className="font-bold text-primary">
               {user.fullName ?? user.primaryEmailAddress?.emailAddress}
             </p>
-          </div>
             <UserButton />
+          </div>
         )}
         {isUserLoaded && !isSignedIn && (
           <SignInButton mode="modal">
@@ -106,35 +56,68 @@ export default function IndexPage() {
       <div className="flex flex-col">
         <p className="text-sm mb-2 text-foreground/50">Loyalty Cards</p>
 
-        <div className="flex flex-col gap-2">
-          {loyaltyCards.map((card) => (
-            <LoyaltyOverviewCard key={card.id} {...card} />
-          ))}
-        </div>
+        {!isUserLoaded ? (
+          <div className="flex justify-center items-center">
+            <LoaderCircleIcon
+              size={48}
+              className="animate-spin aspect-square text-primary dark:text-primary-lighter"
+            />
+          </div>
+        ) : (
+          <LoyaltyOverviewList cards={loyaltyCards} />
+        )}
       </div>
     </div>
   );
 }
 
-function LoyaltyOverviewCard(card: LoyaltyOverviewCardProps) {
-  const styles = card.styles ? themeCssVars(card.styles) : {};
+type LoyaltyOverviewListProps = {
+  cards?: MemberLoyalty[];
+};
+
+function LoyaltyOverviewList({ cards = [] }: LoyaltyOverviewListProps) {
+  return (
+    <div className="flex flex-col gap-2">
+      {cards.map((card) => (
+        <LoyaltyOverviewCard key={card.id} {...card} />
+      ))}
+    </div>
+  );
+}
+
+function LoyaltyOverviewCard(memberLoyalty: MemberLoyalty) {
+  const {
+    loyaltyProgram: {
+      config: {
+        stampIcon,
+        availableRewards: [{ goalPoints }],
+      },
+    },
+    shop: {
+      name: shopName,
+      config: { theme },
+    },
+    points,
+  } = memberLoyalty;
+
+  const styles = theme ? themeCssVars(theme) : {};
+  const remainingPoints = goalPoints % points;
+  const progressPercent = (points / goalPoints) * 10;
 
   return (
     <div style={styles}>
       <div className="h-full bg-primary rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between gap-4">
         <div className="flex items-center gap-2">
           <div className="aspect-square rounded-xl min-h-12 flex items-center justify-center relative border-1 border-primary-lighter bg-primary-light">
-            <LoyaltyStamp icon={card.icon} filled size={32} />
+            <LoyaltyStamp icon={stampIcon} filled size={32} />
           </div>
-          <p className="tracking-widest text-secondary text-xl">
-            {card.shopName}
-          </p>
+          <p className="tracking-widest text-secondary text-xl">{shopName}</p>
         </div>
 
         <div className="bg-secondary-darkest rounded-full overflow-hidden">
           <div
             className="h-1 bg-secondary rounded-full transition-all duration-500"
-            style={{ width: `${card.progressPercent}%` }}
+            style={{ width: `${progressPercent}%` }}
           />
         </div>
 
@@ -146,7 +129,7 @@ function LoyaltyOverviewCard(card: LoyaltyOverviewCardProps) {
             ].join(" ")}
           >
             <p className="text-sm text-white">
-              {card.remainingPoints} points more for next reward
+              {remainingPoints} points more for next reward
             </p>
             <ChevronRightIcon color="white" size={20} />
           </div>
