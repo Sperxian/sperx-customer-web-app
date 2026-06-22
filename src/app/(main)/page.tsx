@@ -37,7 +37,7 @@ export default function IndexPage() {
   }, [isUserLoaded, isSignedIn]);
 
   return (
-    <div className="flex flex-col p-4 gap-4">
+    <div className="h-screen flex flex-col p-4 gap-4">
       {/* App Header */}
       <div className="flex justify-end">
         {isUserLoaded && isSignedIn && (
@@ -58,7 +58,7 @@ export default function IndexPage() {
       </div>
 
       {/* List of Loyalty Cards */}
-      <div className="flex flex-col">
+      <div className="flex-1 flex-col overflow-y-auto">
         <p className="text-sm mb-2 text-foreground/50">Loyalty Cards</p>
 
         {!isUserLoaded ? (
