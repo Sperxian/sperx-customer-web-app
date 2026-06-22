@@ -1,6 +1,6 @@
 "use client";
 
-import { LoaderCircleIcon } from "lucide-react";
+import { LoaderCircleIcon, PackageOpenIcon } from "lucide-react";
 import { SignInButton, SignUpButton, UserButton, useUser } from "@clerk/nextjs";
 import { fetchGuestMemberLoyalties } from "@/lib/services/guest";
 import { useEffect, useState } from "react";
@@ -42,7 +42,7 @@ export default function IndexPage() {
       <div className="flex justify-end">
         {isUserLoaded && isSignedIn && (
           <div className="flex items-center gap-2">
-            <p className="font-bold text-primary">
+            <p className="font-bold text-primary dark:text-primary-lighter">
               {user.fullName ?? user.primaryEmailAddress?.emailAddress}
             </p>
             <UserButton />
@@ -70,7 +70,7 @@ export default function IndexPage() {
           </div>
         ) : (
           <div className="flex flex-col gap-2">
-            {!isSignedIn && <ClaimReminder />}
+            {!isSignedIn && loyaltyCards.length > 0 && <ClaimReminder />}
             <LoyaltyOverviewList cards={loyaltyCards} />
           </div>
         )}
@@ -111,6 +111,16 @@ type LoyaltyOverviewListProps = {
 };
 
 function LoyaltyOverviewList({ cards = [] }: LoyaltyOverviewListProps) {
+  if (cards.length === 0) {
+    return (
+      <div className="flex flex-col items-center w-full gap-4 p-8">
+        <PackageOpenIcon className="w-[150px] h-[150px] md:w-[200px] md:h-[200px] text-primary-lighter dark:text-primary" />
+        <span className="text-md font-medium text-foreground/80 text-center">
+          {"There aren't any loyalty cards here."}
+        </span>
+      </div>
+    );
+  }
   return (
     <div className="flex flex-col gap-2">
       {cards.map((card) => (
