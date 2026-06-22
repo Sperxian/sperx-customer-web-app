@@ -1,10 +1,18 @@
 "use client";
 
+import { getMemberLoyalty } from "@/lib/api/member";
 import { MemberLoyalty } from "@/types/domain";
-import { createContext, ReactNode, useContext } from "react";
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useContext,
+  useState,
+} from "react";
 
 type MemberLoyaltyContextType = {
-  value: MemberLoyalty | null;
+  memberLoyalty: MemberLoyalty;
+  refresh: () => Promise<void>;
 };
 
 const MemberLoyaltyContext = createContext<
@@ -12,25 +20,38 @@ const MemberLoyaltyContext = createContext<
 >(undefined);
 
 export const MemberLoyaltyContextProvider = ({
-  value,
+  value: initialValue,
   children,
 }: {
   value: MemberLoyalty;
   children: ReactNode;
 }) => {
+  const [memberLoyalty, setMemberLoyalty] = useState<MemberLoyalty>(initialValue);
+
+  const refresh = useCallback(async () => {
+    if (!memberLoyalty?.id) return;
+
+    const data = await getMemberLoyalty(memberLoyalty.id);
+    if (data) {
+      setMemberLoyalty(data);
+    }
+  }, [memberLoyalty]);
+
   return (
-    <MemberLoyaltyContext.Provider value={{ value }}>
+    <MemberLoyaltyContext.Provider value={{ memberLoyalty: memberLoyalty, refresh }}>
       {children}
     </MemberLoyaltyContext.Provider>
   );
 };
 
-export const useMemberLoyalty = (): MemberLoyalty => {
+export const useMemberLoyalty = () => {
   const context = useContext(MemberLoyaltyContext);
 
-  if (!context || !context.value) {
-    throw new Error("useMember must be used within a MemberProvider");
+  if (!context) {
+    throw new Error(
+      "useMemberLoyalty must be used within a MemberLoyaltyContextProvider",
+    );
   }
 
-  return context.value;
+  return context;
 };

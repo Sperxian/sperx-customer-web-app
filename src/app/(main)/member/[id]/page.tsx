@@ -11,7 +11,7 @@ import { themeCssVars } from "@/lib/theme";
 import ClaimReminder from "./components/ClaimReminder";
 
 export default function MemberPage() {
-  const memberLoyalty = useMemberLoyalty();
+  const { memberLoyalty } = useMemberLoyalty();
   const [history, setHistory] = useState<MemberPointsHistory | null>();
 
   const { theme } = memberLoyalty.shop.config;

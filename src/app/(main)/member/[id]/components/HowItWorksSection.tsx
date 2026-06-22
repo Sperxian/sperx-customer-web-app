@@ -2,7 +2,7 @@
 import { useMemberLoyalty } from "../MemberContext";
 
 export function HowItWorksSection() {
-  const memberLoyalty = useMemberLoyalty();
+  const { memberLoyalty } = useMemberLoyalty();
   const {
     shop: { name: shopName },
     loyaltyProgram: {
@@ -46,7 +46,9 @@ export function HowItWorksSection() {
                 {index + 1}
               </div>
               <div className="flex flex-col items-start justify-center">
-                <p className="text-sm text-primary dark:text-primary-lighter">{step.title}</p>
+                <p className="text-sm text-primary dark:text-primary-lighter">
+                  {step.title}
+                </p>
                 <p className="text-xs text-foreground/60">{step.subtitle}</p>
               </div>
             </div>

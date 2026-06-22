@@ -65,7 +65,7 @@ interface Props {
 }
 
 export function MemberLoyaltyStamp({ filled = false, size = 20 }: Props) {
-  const memberLoyalty = useMemberLoyalty();
+  const { memberLoyalty } = useMemberLoyalty();
   const { stampIcon } = memberLoyalty.loyaltyProgram.config;
 
   return (

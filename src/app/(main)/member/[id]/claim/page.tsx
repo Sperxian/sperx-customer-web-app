@@ -11,7 +11,7 @@ import { removeGuestMemberLoyalty } from "@/lib/services/guest";
 
 export default function ClaimMemberLoyaltyPage() {
   const { id: memberId } = useParams();
-  const memberLoyalty = useMemberLoyalty();
+  const { memberLoyalty } = useMemberLoyalty();
   const router = useRouter();
   const { isLoaded: isUserLoaded, isSignedIn, user } = useUser();
 

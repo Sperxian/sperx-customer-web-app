@@ -7,7 +7,7 @@ import { QRCodeSVG } from "qrcode.react";
 import { useMemberLoyalty } from "@/app/(main)/member/[id]/MemberContext";
 
 export function LoyaltyCardSection() {
-  const memberLoyalty = useMemberLoyalty();
+  const { memberLoyalty } = useMemberLoyalty();
   const [reward] = memberLoyalty.loyaltyProgram.config.availableRewards;
 
   const card = {
