@@ -1,10 +1,16 @@
+"use client";
+
 import { themeCssVars } from "@/lib/theme";
 import { MemberLoyalty } from "@/types/domain";
 import { ChevronRightIcon } from "lucide-react";
 import { LoyaltyStamp } from "../member/[id]/components/LoyaltyStamp";
+import { useRouter } from "next/navigation";
 
 export default function LoyaltyOverviewCard(memberLoyalty: MemberLoyalty) {
+  const router = useRouter();
+
   const {
+    id: memberId,
     loyaltyProgram: {
       config: {
         stampIcon,
@@ -21,6 +27,10 @@ export default function LoyaltyOverviewCard(memberLoyalty: MemberLoyalty) {
   const styles = theme ? themeCssVars(theme) : {};
   const remainingPoints = goalPoints % points;
   const progressPercent = (points / goalPoints) * 10;
+
+  const goToMemberPage = () => {
+    router.push(`/member/${memberId}`);
+  };
 
   return (
     <div style={styles}>
@@ -45,6 +55,7 @@ export default function LoyaltyOverviewCard(memberLoyalty: MemberLoyalty) {
               "flex justify-between absolute bottom-0 left-0 right-0 p-4",
               "bg-gradient-to-r from-primary via-primary-dark/75 via-primary-darker/30 to-primary-darkest",
             ].join(" ")}
+            onClick={goToMemberPage}
           >
             <p className="text-sm text-white">
               {remainingPoints} points more for next reward
