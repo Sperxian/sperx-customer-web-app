@@ -22,11 +22,13 @@ export default function LoyaltyOverviewCard(memberLoyalty: MemberLoyalty) {
       config: { theme },
     },
     points,
+    isClaimed,
   } = memberLoyalty;
 
   const styles = theme ? themeCssVars(theme) : {};
   const remainingPoints = goalPoints % points;
   const progressPercent = (points / goalPoints) * 10;
+  console.log({ isClaimed });
 
   const goToMemberPage = () => {
     router.push(`/member/${memberId}`);
@@ -35,11 +37,18 @@ export default function LoyaltyOverviewCard(memberLoyalty: MemberLoyalty) {
   return (
     <div style={styles}>
       <div className="h-full bg-primary rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between gap-4">
-        <div className="flex items-center gap-2">
-          <div className="aspect-square rounded-xl min-h-12 flex items-center justify-center relative border-1 border-primary-lighter bg-primary-light">
-            <LoyaltyStamp icon={stampIcon} filled size={32} />
+        <div className="flex items-start justify-between">
+          <div className="flex gap-2">
+            <div className="aspect-square rounded-xl min-h-12 flex items-center justify-center relative border-1 border-primary-lighter bg-primary-light">
+              <LoyaltyStamp icon={stampIcon} filled size={32} />
+            </div>
+            <p className="tracking-widest text-secondary text-xl">{shopName}</p>
           </div>
-          <p className="tracking-widest text-secondary text-xl">{shopName}</p>
+          {!isClaimed && (
+            <div className="bg-secondary text-white text-sm rounded-2xl px-4 py-1 capitalize">
+              Guest
+            </div>
+          )}
         </div>
 
         <div className="bg-secondary-darkest rounded-full overflow-hidden">
