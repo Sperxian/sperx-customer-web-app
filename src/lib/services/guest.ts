@@ -1,3 +1,4 @@
+import { MemberLoyalty } from "@/types/domain";
 import { getMemberLoyalty } from "../api/member";
 
 export const SPX_GUEST_COOKIE_NAME = 'spx-guest';
@@ -8,7 +9,7 @@ type MemberData = {
   dateCreated: Date;
 };
 
-export async function fetchGuestMemberLoyalties() {
+export async function fetchGuestMemberLoyalties(): Promise<MemberLoyalty[]> {
   const items = retrieveLocalStorageData();
   const memberIds = Object.values(items)
     .map(({ memberId }) => memberId);
@@ -18,7 +19,7 @@ export async function fetchGuestMemberLoyalties() {
   return memberLoyalties.filter((loyalty) => !!loyalty);
 }
 
-export async function removeGuestMemberLoyalty(memberId: string): MemberData | null {
+export function removeGuestMemberLoyalty(memberId: string): MemberData | null {
   const items = retrieveLocalStorageData();
   const target = Object.entries(items).find(([_, value]) => value.memberId === memberId);
 

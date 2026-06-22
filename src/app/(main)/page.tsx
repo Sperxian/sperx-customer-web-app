@@ -20,7 +20,12 @@ export default function IndexPage() {
     (async () => {
       try {
         const data = isSignedIn
-          ? await getAllMemberLoyalties()
+          ? (
+              await Promise.all([
+                getAllMemberLoyalties(),
+                fetchGuestMemberLoyalties(),
+              ])
+            ).flat()
           : await fetchGuestMemberLoyalties();
 
         setLoyaltyCards(data);
