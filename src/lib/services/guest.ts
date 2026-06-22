@@ -9,7 +9,7 @@ type MemberData = {
 };
 
 export async function fetchGuestMemberLoyalties() {
-  const items: Record<string, MemberData> = retrieveLocalStorageData();
+  const items = retrieveLocalStorageData();
   const memberIds = Object.values(items)
     .map(({ memberId }) => memberId);
 
@@ -18,7 +18,22 @@ export async function fetchGuestMemberLoyalties() {
   return memberLoyalties.filter((loyalty) => !!loyalty);
 }
 
-function retrieveLocalStorageData() {
+export async function removeGuestMemberLoyalty(memberId: string): MemberData | null {
+  const items = retrieveLocalStorageData();
+  const target = Object.entries(items).find(([_, value]) => value.memberId === memberId);
+
+  if (!target) {
+    console.warn(`Unable to find local stroage data for ${memberId}`)
+    return null;
+  }
+
+  const [keyToDelete, deletedValue] = target;
+  localStorage.removeItem(keyToDelete);
+
+  return deletedValue;
+}
+
+function retrieveLocalStorageData(): Record<string, MemberData> {
   const items: Record<string, MemberData> = {};
 
   for (let i = 0; i < localStorage.length; i++) {
