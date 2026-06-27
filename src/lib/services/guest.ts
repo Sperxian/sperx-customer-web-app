@@ -45,7 +45,6 @@ export function claimGuestMemberLoyalty(memberId: string): GuestMemberLoyalty | 
   }
 
   const [key, value] = target;
-  // localStorage.removeItem(keyToDelete);
   const newValue = {
     ...value,
     claimed: true,
