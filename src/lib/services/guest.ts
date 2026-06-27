@@ -10,7 +10,7 @@ export type GuestMemberLoyalty = {
   claimed?: boolean;
 };
 
-export function saveGuestMemberLoyalty(programId: string, guestLoyalty: GuestMemberLoyalty): GuestMemberLoyalty {
+export function saveGuestMemberLoyalty(programId: string, guestLoyalty: GuestMemberLoyalty) {
   const key = generateKey(programId);
   localStorage.setItem(key, JSON.stringify(guestLoyalty));
 }
@@ -37,7 +37,7 @@ export async function fetchGuestMemberLoyalties(): Promise<MemberLoyalty[]> {
 
 export function claimGuestMemberLoyalty(memberId: string): GuestMemberLoyalty | null {
   const items = retrieveLocalStorageData();
-  const target = Object.entries(items).find(([_, value]) => value.memberId === memberId);
+  const target = Object.entries(items).find(([, value]) => value.memberId === memberId);
 
   if (!target) {
     console.warn(`Unable to find local storage data for ${memberId}`)
