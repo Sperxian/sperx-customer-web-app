@@ -9,6 +9,21 @@ import { getAllMemberLoyalties } from "@/lib/api/member";
 import LoyaltyOverviewCard from "./components/LoyaltyOverviewCard";
 import "@/app/globals.css";
 import { Alert } from "../components/shared/Alert";
+import Image from "next/image";
+
+// TODO: Link cards to appropriate page
+// TODO: Delete unclaimed accounts inside local storage upon successful claim
+// TODO: (A) Page for unsigned user without any guest accountscoffy
+// TODO: (A.1) Urge user to claim their guest accounts
+// TODO: Display unclaimed accounts for registered user
+// TODO: No member loyalties after fetching (registerd or guest)
+// TODO: Not Found page action is to go HOME (index page)
+// TODO: Refresh MembeRLoyaltyContextProvider after claim
+// TODO: If you delete localStorage data, it will create a new one again for logged in users
+//    Soln: Don't delete local storage, just mark it as claimed (What if not logged in?)
+//
+// TODO: Add Sperx icon on header
+//
 
 export default function IndexPage() {
   const { isLoaded: isUserLoaded, isSignedIn, user } = useUser();
@@ -39,7 +54,15 @@ export default function IndexPage() {
   return (
     <div className="h-screen flex flex-col p-4 gap-4">
       {/* App Header */}
-      <div className="flex justify-end">
+      <div className="flex justify-between">
+        <Image
+          className="bg-background aspect-square object-cover"
+          src={"/sperx-logo.png"}
+          alt="Sperx"
+          width={48}
+          height={48}
+          priority
+        />
         {isUserLoaded && isSignedIn && (
           <div className="flex items-center gap-2">
             <p className="font-bold text-primary dark:text-primary-lighter">
