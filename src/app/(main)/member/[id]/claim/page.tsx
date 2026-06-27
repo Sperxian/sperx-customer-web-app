@@ -7,7 +7,7 @@ import { notFound, useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { Alert } from "@/app/components/shared/Alert";
 import { useMemberLoyalty } from "../MemberContext";
-import { removeGuestMemberLoyalty } from "@/lib/services/guest";
+import { claimGuestMemberLoyalty } from "@/lib/services/guest";
 
 export default function ClaimMemberLoyaltyPage() {
   const { id: memberId } = useParams();
@@ -30,7 +30,7 @@ export default function ClaimMemberLoyaltyPage() {
       const data = await response.json();
 
       if (response.ok) {
-        removeGuestMemberLoyalty(memberId as string);
+        claimGuestMemberLoyalty(memberId as string);
         refreshMemberLoyalty();
         goToMemberPage();
         return;
