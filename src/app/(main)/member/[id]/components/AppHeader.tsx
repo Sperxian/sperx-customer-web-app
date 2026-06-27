@@ -5,13 +5,14 @@ import { SignInButton, UserButton, useUser } from "@clerk/nextjs";
 import Image from "next/image";
 
 export function AppHeader() {
+  const { memberLoyalty } = useMemberLoyalty();
   const {
     shop: {
       name: shopName,
       config: { iconLocation, theme },
     },
     loyaltyProgram: { name: loyaltyProgramName },
-  } = useMemberLoyalty();
+  } = memberLoyalty;
   const { isLoaded: isUserLoaded, isSignedIn } = useUser();
 
   const themeVars = theme ? themeCssVars(theme) : undefined;

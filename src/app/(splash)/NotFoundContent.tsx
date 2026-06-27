@@ -1,14 +1,14 @@
 "use client";
 
-import "@/app/globals.css";
 import SplashPageTemplate from "./SplashPageTemplate";
-import { MoveLeftIcon, ShieldQuestionIcon } from "lucide-react";
+import { HomeIcon, ShieldQuestionIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import "@/app/globals.css";
 
 export default function NotFoundContent() {
   const router = useRouter();
-  const goBack = () => {
-    router.back();
+  const goHome = () => {
+    router.replace("/");
   };
 
   return (
@@ -33,10 +33,10 @@ export default function NotFoundContent() {
       actionSlot={
         <button
           className="bg-primary hover:bg-primary/80 text-white p-4 rounded-lg w-full inline-flex items-center justify-center gap-2"
-          onClick={goBack}
+          onClick={goHome}
         >
-          <MoveLeftIcon size={18} />
-          Go back
+          <HomeIcon size={18} />
+          Go Home
         </button>
       }
     />

@@ -7,12 +7,21 @@ import { notFound, useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { Alert } from "@/app/components/shared/Alert";
 import { useMemberLoyalty } from "../MemberContext";
+import { claimGuestMemberLoyalty } from "@/lib/services/guest";
+import { themeCssVars } from "@/lib/theme";
 
 export default function ClaimMemberLoyaltyPage() {
   const { id: memberId } = useParams();
-  const memberLoyalty = useMemberLoyalty();
   const router = useRouter();
   const { isLoaded: isUserLoaded, isSignedIn, user } = useUser();
+  const { memberLoyalty, refresh: refreshMemberLoyalty } = useMemberLoyalty();
+
+  const {
+    shop: {
+      config: { theme },
+    },
+  } = memberLoyalty;
+  const themeVars = theme ? themeCssVars(theme) : undefined;
 
   const [isLinking, setIsLinking] = useState(false);
   const [linkError, setLinkError] = useState<string>();
@@ -29,6 +38,8 @@ export default function ClaimMemberLoyaltyPage() {
       const data = await response.json();
 
       if (response.ok) {
+        claimGuestMemberLoyalty(memberId as string);
+        refreshMemberLoyalty();
         goToMemberPage();
         return;
       }
@@ -60,7 +71,7 @@ export default function ClaimMemberLoyaltyPage() {
   }
 
   return (
-    <div className="h-full flex flex-col gap-4 p-4">
+    <div className="h-full flex flex-col gap-4 p-4" style={themeVars}>
       <div className="text-xl font-bold capitalize">
         Claim this loyalty card
       </div>
