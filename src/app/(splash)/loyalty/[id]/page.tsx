@@ -1,5 +1,9 @@
 "use client";
 
+import {
+  fetchGuestMemberLoyalty,
+  saveGuestMemberLoyalty,
+} from "@/lib/services/guest";
 import { createMemberLoyalty } from "@/lib/services/member";
 import { LoaderCircleIcon } from "lucide-react";
 import Image from "next/image";
@@ -11,12 +15,6 @@ interface PageParams {
     id: string;
   }>;
 }
-
-type MemberData = {
-  memberId: string;
-  dateCreated: Date;
-};
-
 type PAGE_STATE = "UNMOUNTED" | "CHECKING" | "CREATING" | "REDIRECTING";
 
 const PAGE_STATE_METADATA = {
@@ -46,15 +44,9 @@ export default function MemberPage({ params }: PageParams) {
   const currentStateMetadata = PAGE_STATE_METADATA[state];
 
   useEffect(() => {
-    const LOCAL_STORAGE_KEY = `spx-loyalty-${programId}`;
-
     const checkLocalMember = () => {
       setState("CHECKING");
-      const existingMemberData = localStorage.getItem(LOCAL_STORAGE_KEY);
-
-      const memberData: MemberData | null = existingMemberData
-        ? (JSON.parse(existingMemberData) as MemberData)
-        : null;
+      const memberData = fetchGuestMemberLoyalty(programId);
 
       const timeoutMs = 1000;
       if (memberData) {
@@ -70,11 +62,12 @@ export default function MemberPage({ params }: PageParams) {
       const { id: memberId, dateCreated: dateJoined } = newMember;
       console.log(`Created new member ID: ${memberId}`);
 
-      const newMemberData = {
+      const guestLoyalty = {
         memberId,
         dateCreated: dateJoined,
+        claimed: false,
       };
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(newMemberData));
+      saveGuestMemberLoyalty(programId, guestLoyalty);
 
       setTimeout(() => redirectToMemberPage(memberId), 500);
     };

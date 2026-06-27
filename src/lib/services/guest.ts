@@ -4,11 +4,25 @@ import { getMemberLoyalty } from "../api/member";
 export const SPX_GUEST_COOKIE_NAME = 'spx-guest';
 export const SPX_GUEST_HEADER_NAME = 'spx-guest';
 
-type MemberData = {
+export type GuestMemberLoyalty = {
   memberId: string;
   dateCreated: Date;
   claimed?: boolean;
 };
+
+export function saveGuestMemberLoyalty(programId: string, guestLoyalty: GuestMemberLoyalty): GuestMemberLoyalty {
+  const key = generateKey(programId);
+  localStorage.setItem(key, JSON.stringify(guestLoyalty));
+}
+
+export function fetchGuestMemberLoyalty(programId: string): GuestMemberLoyalty | null {
+  const key = generateKey(programId);
+  const existingGuestMemberLoyalty = localStorage.getItem(key);
+  
+  return existingGuestMemberLoyalty
+    ? (JSON.parse(existingGuestMemberLoyalty) as GuestMemberLoyalty)
+    : null;
+}
 
 export async function fetchGuestMemberLoyalties(): Promise<MemberLoyalty[]> {
   const items = retrieveLocalStorageData();
@@ -21,7 +35,7 @@ export async function fetchGuestMemberLoyalties(): Promise<MemberLoyalty[]> {
   return memberLoyalties.filter((loyalty) => !!loyalty);
 }
 
-export function claimGuestMemberLoyalty(memberId: string): MemberData | null {
+export function claimGuestMemberLoyalty(memberId: string): GuestMemberLoyalty | null {
   const items = retrieveLocalStorageData();
   const target = Object.entries(items).find(([_, value]) => value.memberId === memberId);
 
@@ -41,18 +55,22 @@ export function claimGuestMemberLoyalty(memberId: string): MemberData | null {
   return newValue;
 }
 
-function retrieveLocalStorageData(): Record<string, MemberData> {
-  const items: Record<string, MemberData> = {};
+function retrieveLocalStorageData(): Record<string, GuestMemberLoyalty> {
+  const items: Record<string, GuestMemberLoyalty> = {};
 
   for (let i = 0; i < localStorage.length; i++) {
     const key = localStorage.key(i);
     if (key && key.startsWith('spx-loyalty-')) {
       const value = localStorage.getItem(key)
       if (value) {
-        items[key] = JSON.parse(value) as MemberData;
+        items[key] = JSON.parse(value) as GuestMemberLoyalty;
       }
     }
   }
 
   return items;
+}
+
+function generateKey(programId: string): string {
+  return `spx-loyalty-${programId}`
 }
