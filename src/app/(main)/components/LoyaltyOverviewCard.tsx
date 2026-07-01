@@ -26,9 +26,9 @@ export default function LoyaltyOverviewCard(memberLoyalty: MemberLoyalty) {
   } = memberLoyalty;
 
   const styles = theme ? themeCssVars(theme) : {};
-  const remainingPoints = goalPoints % points;
-  const progressPercent = (points / goalPoints) * 10;
-  console.log({ isClaimed });
+  const pointsToGoal = points % goalPoints;
+  const remainingPoints = goalPoints - pointsToGoal;
+  const progressPercent = (pointsToGoal / goalPoints) * 100;
 
   const goToMemberPage = () => {
     router.push(`/member/${memberId}`);
