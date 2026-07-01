@@ -6,9 +6,9 @@ import SplashPageTemplate from "@/app/(splash)/SplashPageTemplate";
 import { SignInButton, useUser } from "@clerk/nextjs";
 import "@/app/globals.css";
 
-export default function ForbiddenContent() {
+export default function ForbiddenMemberLoyaltyContent() {
   const router = useRouter();
-  const { isLoaded: isUserLoaded, isSignedIn, user } = useUser();
+  const { isLoaded: isUserLoaded, isSignedIn } = useUser();
 
   const goHome = () => {
     router.replace("/");
