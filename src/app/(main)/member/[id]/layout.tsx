@@ -2,6 +2,8 @@ import { AppHeader } from "@/app/(main)/member/[id]/components/AppHeader";
 import { getMemberLoyalty } from "@/lib/api/member";
 import { MemberLoyaltyContextProvider } from "./MemberContext";
 import { notFound } from "next/navigation";
+import { isAxiosError } from "axios";
+import ForbiddenMemberLoyaltyContent from "@/app/(main)/member/[id]/components/ForbiddenMemberLoyaltyContent";
 import "@/app/globals.css";
 
 export default async function MemberLayout({
@@ -14,7 +16,15 @@ export default async function MemberLayout({
   }>;
 }>) {
   const { id: memberId } = await params;
-  const memberLoyalty = await getMemberLoyalty(memberId);
+  let memberLoyalty = null;
+  try {
+    memberLoyalty = await getMemberLoyalty(memberId);
+  } catch (error) {
+    if (isAxiosError(error) && error.response?.status === 403) {
+      return <ForbiddenMemberLoyaltyContent />;
+    }
+  }
+
   if (!memberLoyalty) {
     return notFound();
   }
