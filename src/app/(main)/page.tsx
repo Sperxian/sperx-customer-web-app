@@ -12,6 +12,9 @@ import Image from "next/image";
 import "@/app/globals.css";
 
 export default function IndexPage() {
+  const isCustomerLoginEnabled =
+    process.env.NEXT_PUBLIC_FEATURE_FLAG_ENABLE_CUSTOMER_LOGIN === "true";
+
   const { isLoaded: isUserLoaded, isSignedIn, user } = useUser();
   const [loyaltyCards, setLoyaltyCards] = useState<MemberLoyalty[]>([]);
 
@@ -49,21 +52,22 @@ export default function IndexPage() {
           height={48}
           priority
         />
-        {isUserLoaded && isSignedIn && (
-          <div className="flex items-center gap-2">
-            <p className="font-bold text-primary dark:text-primary-lighter">
-              {user.fullName ?? user.primaryEmailAddress?.emailAddress}
-            </p>
-            <UserButton />
-          </div>
-        )}
-        {isUserLoaded && !isSignedIn && (
-          <SignInButton mode="modal">
-            <button className="bg-primary text-white rounded-2xl px-4 py-1 capitalize">
-              Sign in
-            </button>
-          </SignInButton>
-        )}
+        {isCustomerLoginEnabled &&
+          isUserLoaded &&
+          (isSignedIn ? (
+            <div className="flex items-center gap-2">
+              <p className="font-bold text-primary dark:text-primary-lighter">
+                {user.fullName ?? user.primaryEmailAddress?.emailAddress}
+              </p>
+              <UserButton />
+            </div>
+          ) : (
+            <SignInButton mode="modal">
+              <button className="bg-primary text-white rounded-2xl px-4 py-1 capitalize">
+                Sign in
+              </button>
+            </SignInButton>
+          ))}
       </div>
 
       {/* List of Loyalty Cards */}
@@ -79,7 +83,9 @@ export default function IndexPage() {
           </div>
         ) : (
           <div className="flex flex-col gap-2">
-            {!isSignedIn && loyaltyCards.length > 0 && <ClaimReminder />}
+            {isCustomerLoginEnabled &&
+              !isSignedIn &&
+              loyaltyCards.length > 0 && <ClaimReminder />}
             <LoyaltyOverviewList cards={loyaltyCards} />
           </div>
         )}

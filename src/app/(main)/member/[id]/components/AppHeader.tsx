@@ -5,6 +5,9 @@ import { SignInButton, UserButton, useUser } from "@clerk/nextjs";
 import Image from "next/image";
 
 export function AppHeader() {
+  const isCustomerLoginEnabled =
+    process.env.NEXT_PUBLIC_FEATURE_FLAG_ENABLE_CUSTOMER_LOGIN === "true";
+
   const { memberLoyalty } = useMemberLoyalty();
   const {
     shop: {
@@ -41,14 +44,18 @@ export function AppHeader() {
           </p>
         </div>
       </div>
-      {isUserLoaded && isSignedIn && <UserButton />}
-      {isUserLoaded && !isSignedIn && (
-        <SignInButton mode="modal">
-          <button className="bg-secondary text-white rounded-2xl px-4 py-1 capitalize">
-            Sign in
-          </button>
-        </SignInButton>
-      )}
+
+      {isCustomerLoginEnabled &&
+        isUserLoaded &&
+        (isSignedIn ? (
+          <UserButton />
+        ) : (
+          <SignInButton mode="modal">
+            <button className="bg-secondary text-white rounded-2xl px-4 py-1 capitalize">
+              Sign in
+            </button>
+          </SignInButton>
+        ))}
     </header>
   );
 }
