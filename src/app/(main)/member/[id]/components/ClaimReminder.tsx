@@ -10,16 +10,19 @@ type Props = {
 };
 
 export default function ClaimReminder({ memberLoyalty }: Props) {
+  const isCustomerLoginEnabled =
+    process.env.NEXT_PUBLIC_FEATURE_FLAG_ENABLE_CUSTOMER_LOGIN === "true";
+
   const { isLoaded, isSignedIn } = useUser();
   const router = useRouter();
+
+  if (!isCustomerLoginEnabled || !isLoaded) {
+    return null;
+  }
 
   const goToClaimPage = () => {
     router.push(`/member/${memberLoyalty.id}/claim`);
   };
-
-  if (!isLoaded) {
-    return null;
-  }
 
   const showSignUpReminder = isSignedIn === false && memberLoyalty.points >= 2;
   const showClaimReminder = isSignedIn === true && !memberLoyalty.isClaimed;
