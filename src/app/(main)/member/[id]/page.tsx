@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { MemberPointsHistory } from "@/types/domain";
 import { themeCssVars } from "@/lib/theme";
 import ClaimReminder from "./components/ClaimReminder";
+import { Alert } from "@/app/components/shared/Alert";
 
 export default function MemberPage() {
   const { memberLoyalty } = useMemberLoyalty();
@@ -28,11 +29,22 @@ export default function MemberPage() {
     }
   }, [memberLoyalty]);
 
+  const minimumGoalPoints = memberLoyalty.loyaltyProgram.config.availableRewards
+    .map((reward) => reward.goalPoints)
+    .reduce((min, curr) => Math.min(min, curr), Infinity);
+    
+  const canClaimReward = memberLoyalty.points >= minimumGoalPoints;
+
   return (
     <div className="flex-1 relative overflow-hidden" style={themeVars}>
       <main className="h-full overflow-y-auto">
         <div className="grid gap-4 p-4">
           <ClaimReminder memberLoyalty={memberLoyalty} />
+          {canClaimReward && <Alert
+            variant="info"
+            title="🎉 Your reward awaits."
+            message="You've earned a reward. Claim it now! 🎁"
+          />}
           <LoyaltyCardSection />
           {history && history.items.length === 0 && <HowItWorksSection />}
           {history && <ActivityHistorySection history={history} />}
