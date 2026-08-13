@@ -13,12 +13,17 @@ export async function createMemberLoyalty(loyaltyId: string): Promise<MemberLoya
 }
 
 export async function getMemberLoyalty(memberId: string): Promise<MemberLoyalty | null> {
+  const response = await apiClient.get<MemberLoyalty>(`/customer/members/${memberId}/loyalty`);
+  return response.data;
+}
+
+export async function getAllMemberLoyalties(): Promise<MemberLoyalty[]> {
   try {
-    const response = await apiClient.get<MemberLoyalty>(`/customer/members/${memberId}/loyalty`);
+    const response = await apiClient.get<MemberLoyalty[]>(`/customer/members`);
     return response.data;
   } catch (error) {
-    console.error("Failed to fetch member data:", error);
-    return null;
+    console.error("Failed to fetch member loyalties of user:", error);
+    return [];
   }
 }
 

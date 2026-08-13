@@ -2,12 +2,12 @@
 
 import { InfoIcon } from "lucide-react";
 import { useState } from "react";
-import { LoyaltyStamp } from "./LoyaltyStamp";
+import { MemberLoyaltyStamp } from "./LoyaltyStamp";
 import { QRCodeSVG } from "qrcode.react";
 import { useMemberLoyalty } from "@/app/(main)/member/[id]/MemberContext";
 
 export function LoyaltyCardSection() {
-  const memberLoyalty = useMemberLoyalty();
+  const { memberLoyalty } = useMemberLoyalty();
   const [reward] = memberLoyalty.loyaltyProgram.config.availableRewards;
 
   const card = {
@@ -193,7 +193,7 @@ export function StampGrid({ total, collected }: StampGridProps) {
                 : "border-2 border-primary-lighter border-dashed bg-primary-darker/20"
             }`}
           >
-            <LoyaltyStamp filled={filled} size={32} />
+            <MemberLoyaltyStamp filled={filled} size={32} />
 
             {!filled && (
               <span className="text-[8px] text-white absolute bottom-1 right-1">
