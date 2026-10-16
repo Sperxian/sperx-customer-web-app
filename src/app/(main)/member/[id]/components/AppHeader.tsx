@@ -12,7 +12,7 @@ export function AppHeader() {
   const {
     shop: {
       name: shopName,
-      config: { iconLocation, theme },
+      config: { iconLocation = "/sperx-logo-only.png", theme },
     },
     loyaltyProgram: { name: loyaltyProgramName },
   } = memberLoyalty;
@@ -44,7 +44,6 @@ export function AppHeader() {
           </p>
         </div>
       </div>
-
       {isCustomerLoginEnabled &&
         isUserLoaded &&
         (isSignedIn ? (
