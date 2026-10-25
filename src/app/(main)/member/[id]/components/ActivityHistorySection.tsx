@@ -2,6 +2,7 @@ import { MemberPointsHistory } from "@/types/domain";
 import { MemberPointTransaction } from "@/types/domain";
 import { MemberLoyaltyStamp } from "./LoyaltyStamp";
 import { formatDateTime } from "@/lib/utils/date.utils";
+import { GiftIcon } from "lucide-react";
 
 interface ActivityHistoryProps {
   history: MemberPointsHistory;
@@ -25,7 +26,9 @@ export function ActivityHistorySection({ history }: ActivityHistoryProps) {
             <MemberLoyaltyStamp filled={false} size={24} />
           </div>
           <div className="flex flex-col items-center">
-            <p className="text-md text-primary dark:text-primary-lighter">No stamps yet</p>
+            <p className="text-md text-primary dark:text-primary-lighter">
+              No stamps yet
+            </p>
             <p className="text-xs text-foreground/60">
               Your activity will appear here after your first stamp.
             </p>
@@ -37,7 +40,7 @@ export function ActivityHistorySection({ history }: ActivityHistoryProps) {
 }
 
 interface ActivityHistoryEntryProps {
-  entry: MemberPointTransaction; // Rename to MEmbeRPointsTransaction
+  entry: MemberPointTransaction;
   isLast: boolean;
 }
 
@@ -46,42 +49,42 @@ export function ActivityHistoryEntry({
   isLast,
 }: ActivityHistoryEntryProps) {
   const { points } = entry;
-  const description = mapDescription(entry);
 
   return (
     <div
-      className={`flex justify-between items-center py-2 ${
+      className={`flex justify-start items-center gap-2 py-2 ${
         !isLast ? "border-b border-foreground/10" : ""
       }`}
     >
+      <span className="inline-flex gap-1 items-centers text-primary/80">
+        {points > 0 ? (
+          <div className="w-[36px] aspect-square rounded-full bg-primary flex items-center justify-center flex-shrink-0">
+            <MemberLoyaltyStamp filled size={18} />
+          </div>
+        ) : (
+          <div className="w-[36px] aspect-square rounded-full border flex items-center justify-center flex-shrink-0">
+            <GiftIcon className="text-primary" size={18} />
+          </div>
+        )}
+      </span>
       <div>
-        <p className="text-sm text-primary dark:text-primary-lighter">{description}</p>
+        <p className="text-sm text-primary dark:text-primary-lighter">
+          {points > 0 ? (
+            <span>
+              Collected <span className="font-bold">{points}</span>{" "}
+              {points === 1 ? "stamp" : "stamps"}
+            </span>
+          ) : (
+            <span>
+              Redeemed free reward for{" "}
+              <span className="font-bold">{Math.abs(points)}</span> stamps
+            </span>
+          )}
+        </p>
         <p className="text-xs text-foreground/50">
           {formatDateTime(entry.dateCreated)}
         </p>
       </div>
-
-      {points > 0 && (
-        <span className="inline-flex gap-1 items-centers text-primary/80">
-          <div className="w-[36px] aspect-square rounded-full bg-primary flex items-center justify-center flex-shrink-0">
-            <MemberLoyaltyStamp filled size={18} />
-          </div>
-        </span>
-      )}
     </div>
   );
 }
-
-const mapDescription = (entry: MemberPointTransaction): string => {
-  const { notes, points } = entry;
-  const wholePoints = Math.trunc(points);
-
-  switch (notes) {
-    case "Accumulation":
-      return `Collected ${wholePoints} ${wholePoints === 1 ? "stamp" : "stamps"}`;
-    case "Redemption":
-      return `Redeemed free reward (${wholePoints} stamps)`;
-    default:
-      return "TODO! Unknown transaction";
-  }
-};
