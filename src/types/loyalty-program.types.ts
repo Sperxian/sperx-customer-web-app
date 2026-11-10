@@ -1,9 +1,11 @@
 export type LoyaltyProgram = {
   id: string;
   name: string;
-  type: string;
-  config: StampBasedConfig;
+  type: LoyaltyProgramType;
+  config: StampBasedConfig | WalletBasedConfig;
 };
+
+export type LoyaltyProgramType = "STAMP_BASED" | "WALLET_BASED";
 
 export type StampBasedConfig = {
   stampIcon: string;
