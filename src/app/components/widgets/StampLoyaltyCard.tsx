@@ -1,21 +1,18 @@
 import { MemberLoyaltyStamp } from "@/app/components/widgets/LoyaltyStamp";
-
-export interface LoyaltyCardData {
-  loyaltyProgramName: string;
-  memberId: string;
-  totalStamps: number;
-  collectedStamps: number;
-  rewardDescription: string;
-}
+import type { MemberLoyalty } from "@/types/domain";
 
 interface StampLoyaltyCardProps {
-  card: LoyaltyCardData;
+  memberLoyalty: MemberLoyalty;
 }
 
-export function StampLoyaltyCard({ card }: StampLoyaltyCardProps) {
-  const trackingPoints = card.collectedStamps % card.totalStamps;
-  const remainingPoints = card.totalStamps - trackingPoints;
-  const remainingPercent = (card.collectedStamps / card.totalStamps) * 100;
+export function StampLoyaltyCard({
+  memberLoyalty,
+}: StampLoyaltyCardProps) {
+  const [reward] = memberLoyalty.loyaltyProgram.config.availableRewards;
+  const totalStamps = reward.goalPoints;
+  const trackingPoints = memberLoyalty.points % totalStamps;
+  const remainingPoints = totalStamps - trackingPoints;
+  const remainingPercent = (memberLoyalty.points / totalStamps) * 100;
 
   return (
     <div className="h-full bg-primary rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between">
@@ -25,14 +22,14 @@ export function StampLoyaltyCard({ card }: StampLoyaltyCardProps) {
       <div>
         <div className="flex items-center justify-between uppercase tracking-widest mb-4">
           <p className="text-xs text-white uppercase">
-            {card.loyaltyProgramName}
+            {memberLoyalty.loyaltyProgram.name}
           </p>
           <p className="text-xs text-secondary">
-            {trackingPoints} / {card.totalStamps}
+            {trackingPoints} / {totalStamps}
           </p>
         </div>
 
-        <StampGrid total={card.totalStamps} collected={trackingPoints} />
+        <StampGrid total={totalStamps} collected={trackingPoints} />
       </div>
 
       <div className="flex items-center gap-2 mt-2.5">
@@ -44,8 +41,8 @@ export function StampLoyaltyCard({ card }: StampLoyaltyCardProps) {
         </div>
         <span className="text-sm text-secondary font-bold whitespace-nowrap">
           {remainingPoints > 0
-            ? `${remainingPoints} more for ${card.rewardDescription}`
-            : `${card.rewardDescription} earned!`}
+            ? `${remainingPoints} more for ${reward.name ?? "reward"}`
+            : `${reward.name ?? "reward"} earned!`}
         </span>
       </div>
     </div>
