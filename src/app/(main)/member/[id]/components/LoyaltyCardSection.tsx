@@ -6,6 +6,7 @@ import { QRCodeSVG } from "qrcode.react";
 import { useMemberLoyalty } from "@/app/(main)/member/[id]/MemberContext";
 import { StampLoyaltyCard } from "@/app/components/widgets/StampLoyaltyCard";
 import type { MemberLoyalty } from "@/types/domain";
+import { WalletLoyaltyCard } from "@/app/components/widgets/WalletLoyaltyCard";
 
 export function LoyaltyCardSection() {
   const { memberLoyalty } = useMemberLoyalty();
@@ -55,7 +56,12 @@ function LoyaltyCard({ memberLoyalty }: LoyaltyCardProps) {
             >
               {/* Front face */}
               <div className="absolute inset-0 w-full h-full [backface-visibility:hidden] [--webkit-backface-visibility:hidden] overflow-hidden">
-                <StampLoyaltyCard memberLoyalty={memberLoyalty} />
+                {memberLoyalty.loyaltyProgram.type == "STAMP_BASED" && (
+                  <StampLoyaltyCard memberLoyalty={memberLoyalty} />
+                )}
+                {memberLoyalty.loyaltyProgram.type == "WALLET_BASED" && (
+                  <WalletLoyaltyCard memberLoyalty={memberLoyalty} />
+                )}
               </div>
 
               {/* Back face */}
