@@ -1,12 +1,9 @@
+import type { LoyaltyProgram } from "@/types/loyalty-program.types";
+
 export type MemberLoyalty = {
   id: string;
   points: number;
-  loyaltyProgram: {
-    id: string;
-    name: string;
-    type: string;
-    config: StampBasedConfig;
-  },
+  loyaltyProgram: LoyaltyProgram,
   shop: {
     id: string;
     name: string;
@@ -20,18 +17,6 @@ export type ShopConfig = {
   iconLocation: string;
   theme?: ThemeColors;
 }
-
-export type StampBasedConfig = {
-  stampIcon: string;
-  availableRewards: RewardMetadata[];
-};
-
-export type RewardMetadata = {
-  code: string;
-  name: string;
-  description?: string;
-  goalPoints: number;
-};
 
 export type ThemeColors = {
   primary?: string;
