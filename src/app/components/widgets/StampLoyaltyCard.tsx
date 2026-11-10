@@ -1,4 +1,4 @@
-import { MemberLoyaltyStamp } from "@/app/(main)/member/[id]/components/LoyaltyStamp";
+import { MemberLoyaltyStamp } from "@/app/components/widgets/LoyaltyStamp";
 
 export interface LoyaltyCardData {
   loyaltyProgramName: string;

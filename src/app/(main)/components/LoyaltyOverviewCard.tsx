@@ -3,7 +3,7 @@
 import { themeCssVars } from "@/lib/theme";
 import { MemberLoyalty } from "@/types/domain";
 import { ChevronRightIcon } from "lucide-react";
-import { LoyaltyStamp } from "../member/[id]/components/LoyaltyStamp";
+import { LoyaltyStamp } from "../../components/widgets/LoyaltyStamp";
 import { useRouter } from "next/navigation";
 
 export default function LoyaltyOverviewCard(memberLoyalty: MemberLoyalty) {

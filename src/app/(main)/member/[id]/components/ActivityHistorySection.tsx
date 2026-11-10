@@ -1,6 +1,6 @@
 import { MemberPointsHistory } from "@/types/domain";
 import { MemberPointTransaction } from "@/types/domain";
-import { MemberLoyaltyStamp } from "./LoyaltyStamp";
+import { MemberLoyaltyStamp } from "../../../../components/widgets/LoyaltyStamp";
 import { formatDateTime } from "@/lib/utils/date.utils";
 import { GiftIcon } from "lucide-react";
 

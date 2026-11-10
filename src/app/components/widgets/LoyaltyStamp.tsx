@@ -26,7 +26,7 @@ import {
   UtensilsIcon,
   WashingMachineIcon,
 } from "lucide-react";
-import { useMemberLoyalty } from "../MemberContext";
+import { useMemberLoyalty } from "../../(main)/member/[id]/MemberContext";
 
 const iconMap = {
   milk_tea: CupSodaIcon,
