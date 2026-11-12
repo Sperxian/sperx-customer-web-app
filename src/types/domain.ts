@@ -3,6 +3,7 @@ import type { LoyaltyProgram } from "@/types/loyalty-program.types";
 export type MemberLoyalty = {
   id: string;
   points: number;
+  walletBalance: number | null;
   loyaltyProgram: LoyaltyProgram,
   shop: {
     id: string;

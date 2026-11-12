@@ -24,6 +24,9 @@ export function WalletLoyaltyCard({ memberLoyalty }: WalletLoyaltyCardProps) {
   const progressPercent =
     total > 0 ? Math.min((progressPoints / total) * 100, 100) : 0;
   const spendAmount = (config.convertibleAmountCents / 100).toFixed(2);
+  const walletBalance = (
+    memberLoyalty.walletBalance ? memberLoyalty.walletBalance / 100 : 0
+  ).toFixed(2);
 
   return (
     <div className="relative flex h-full w-full flex-col overflow-hidden rounded-2xl bg-gradient-to-br from-primary via-primary to-primary-dark p-5 text-white shadow-lg">
@@ -47,7 +50,7 @@ export function WalletLoyaltyCard({ memberLoyalty }: WalletLoyaltyCardProps) {
         <div className="flex flex-col w-1/2">
           <p className="text-xs font-medium text-white/70">Wallet Balance</p>
           <p className="mt-0.5 text-3xl font-bold leading-none tracking-tight">
-            ₱ 232.50
+            ₱ {walletBalance}
           </p>
         </div>
         <div className="flex flex-col w-1/2 text-right">
