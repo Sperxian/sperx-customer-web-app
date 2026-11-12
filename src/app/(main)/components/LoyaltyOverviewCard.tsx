@@ -3,20 +3,16 @@
 import { themeCssVars } from "@/lib/theme";
 import { MemberLoyalty } from "@/types/domain";
 import { ChevronRightIcon } from "lucide-react";
-import { LoyaltyStamp } from "../member/[id]/components/LoyaltyStamp";
+import { LoyaltyStamp } from "../../components/widgets/LoyaltyStamp";
 import { useRouter } from "next/navigation";
+import { StampBasedConfig } from "@/types/loyalty-program.types";
 
 export default function LoyaltyOverviewCard(memberLoyalty: MemberLoyalty) {
   const router = useRouter();
 
   const {
     id: memberId,
-    loyaltyProgram: {
-      config: {
-        stampIcon,
-        availableRewards: [{ goalPoints }],
-      },
-    },
+    loyaltyProgram: { config },
     shop: {
       name: shopName,
       config: { theme },
@@ -24,6 +20,11 @@ export default function LoyaltyOverviewCard(memberLoyalty: MemberLoyalty) {
     points,
     isClaimed,
   } = memberLoyalty;
+
+  const {
+    stampIcon,
+    availableRewards: [{ goalPoints }],
+  } = config as StampBasedConfig;
 
   const styles = theme ? themeCssVars(theme) : {};
   const pointsToGoal = points % goalPoints;
