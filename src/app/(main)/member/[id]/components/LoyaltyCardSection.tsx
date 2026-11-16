@@ -2,43 +2,28 @@
 
 import { InfoIcon } from "lucide-react";
 import { useState } from "react";
-import { MemberLoyaltyStamp } from "./LoyaltyStamp";
 import { QRCodeSVG } from "qrcode.react";
 import { useMemberLoyalty } from "@/app/(main)/member/[id]/MemberContext";
+import { StampLoyaltyCard } from "@/app/components/widgets/StampLoyaltyCard";
+import type { MemberLoyalty } from "@/types/domain";
+import { WalletLoyaltyCard } from "@/app/components/widgets/WalletLoyaltyCard";
 
 export function LoyaltyCardSection() {
   const { memberLoyalty } = useMemberLoyalty();
-  const [reward] = memberLoyalty.loyaltyProgram.config.availableRewards;
-
-  const card = {
-    memberId: memberLoyalty.id,
-    loyaltyProgramName: memberLoyalty.loyaltyProgram.name,
-    totalStamps: reward.goalPoints,
-    collectedStamps: memberLoyalty.points,
-    rewardDescription: reward.name ?? "reward",
-  };
 
   return (
     <div>
       <p className="text-sm capitalize mb-2 text-foreground/50">Loyalty Card</p>
-      <LoyaltyCard card={card} />
+      <LoyaltyCard memberLoyalty={memberLoyalty} />
     </div>
   );
 }
 
-export interface LoyaltyCardData {
-  loyaltyProgramName: string;
-  memberId: string;
-  totalStamps: number;
-  collectedStamps: number;
-  rewardDescription: string;
-}
-
 interface LoyaltyCardProps {
-  card: LoyaltyCardData;
+  memberLoyalty: MemberLoyalty;
 }
 
-function LoyaltyCard({ card }: LoyaltyCardProps) {
+function LoyaltyCard({ memberLoyalty }: LoyaltyCardProps) {
   const [isFlipped, setIsFlipped] = useState(false);
   const hintMessage = (
     <p className="flex mt-2 text-center text-xs text-primary-lighter items-center justify-center gap-1">
@@ -71,12 +56,17 @@ function LoyaltyCard({ card }: LoyaltyCardProps) {
             >
               {/* Front face */}
               <div className="absolute inset-0 w-full h-full [backface-visibility:hidden] [--webkit-backface-visibility:hidden] overflow-hidden">
-                <LoyaltyCardFront card={card} />
+                {memberLoyalty.loyaltyProgram.type == "STAMP_BASED" && (
+                  <StampLoyaltyCard memberLoyalty={memberLoyalty} />
+                )}
+                {memberLoyalty.loyaltyProgram.type == "WALLET_BASED" && (
+                  <WalletLoyaltyCard memberLoyalty={memberLoyalty} />
+                )}
               </div>
 
               {/* Back face */}
               <div className="absolute inset-0 w-full h-full [transform:rotateY(180deg)] [backface-visibility:hidden] [--webkit-backface-visibility:hidden]">
-                <LoyaltyCardBack card={card} />
+                <LoyaltyCardBack memberLoyalty={memberLoyalty} />
               </div>
             </div>
           </div>
@@ -88,121 +78,25 @@ function LoyaltyCard({ card }: LoyaltyCardProps) {
   );
 }
 
-interface LoyaltyCardFrontProps {
-  card: LoyaltyCardData;
-}
-
-export function LoyaltyCardFront({ card }: LoyaltyCardFrontProps) {
-  const trackingPoints = card.collectedStamps % card.totalStamps;
-  const remainingPoints = card.totalStamps - trackingPoints;
-  const remainingPercent = (card.collectedStamps / card.totalStamps) * 100;
-
-  return (
-    <div className="h-full bg-primary rounded-2xl p-4 relative overflow-hidden flex flex-col justify-between">
-      {/* Decorative circles */}
-      <div className="absolute -top-[28px] -right-[28px] w-[90px] h-[90px] rounded-full border-[18px] border-white/5" />
-      <div className="absolute bottom-[-18px] left-[18px] w-[55px] h-[55px] rounded-full border-[11px] border-white/5" />
-
-      <div>
-        <div className="flex items-center justify-between uppercase tracking-widest mb-4">
-          <p className="text-xs text-white uppercase">
-            {card.loyaltyProgramName}
-          </p>
-          <p className="text-xs text-secondary">
-            {trackingPoints} / {card.totalStamps}
-          </p>
-        </div>
-
-        <StampGrid total={card.totalStamps} collected={trackingPoints} />
-      </div>
-
-      <div className="flex items-center gap-2 mt-2.5">
-        <div className="flex-1 h-1 bg-secondary-darkest rounded-full overflow-hidden">
-          <div
-            className="h-full bg-secondary rounded-full transition-all duration-500"
-            style={{ width: `${remainingPercent}%` }}
-          />
-        </div>
-        <span className="text-sm text-secondary font-bold whitespace-nowrap">
-          {remainingPoints > 0
-            ? `${remainingPoints} more for ${card.rewardDescription}`
-            : `${card.rewardDescription} earned!`}
-        </span>
-      </div>
-    </div>
-  );
-}
-
 interface LoyaltyCardBackProps {
-  card: LoyaltyCardData;
+  memberLoyalty: MemberLoyalty;
 }
 
-export function LoyaltyCardBack({ card }: LoyaltyCardBackProps) {
+export function LoyaltyCardBack({ memberLoyalty }: LoyaltyCardBackProps) {
   return (
     <div className="h-full bg-primary rounded-3xl p-4 relative overflow-hidden flex flex-col items-center justify-center">
       {/* Decorative circle */}
       <div className="absolute -top-[28px] -left-[28px] w-[90px] h-[90px] rounded-full border-[18px] border-white/5" />
 
       <p className="text-xs text-white uppercase tracking-widest mb-4">
-        {card.loyaltyProgramName}
+        {memberLoyalty.loyaltyProgram.name}
       </p>
 
       <div className="bg-white rounded-lg p-4 mb-2">
-        <QrCode data={card.memberId} size={140} color="var(--primary)" />
+        <QrCode data={memberLoyalty.id} size={140} color="var(--primary)" />
       </div>
 
-      <p className="text-xs text-white">{card.memberId}</p>
-    </div>
-  );
-}
-
-interface StampGridProps {
-  total: number;
-  collected: number;
-}
-
-export function StampGrid({ total, collected }: StampGridProps) {
-  /**
-   * - <= 6 stamps => 1 row
-   * - > 6 stamps => multiple rows
-   */
-  // NOTE: MAX number of stamps should be 15
-
-  const MAX_ITEMS_PER_ROW = 5;
-  const rows = Math.ceil(total / MAX_ITEMS_PER_ROW);
-  const columns = Math.ceil(total / rows);
-
-  const maxHeight = rows === 1 ? "96px" : rows === 2 ? "72px" : "48px";
-
-  return (
-    <div
-      className="grid gap-2 justify-center"
-      style={{
-        gridTemplateColumns: `repeat(${columns}, minmax(12px, ${maxHeight}))`,
-      }}
-    >
-      {Array.from({ length: total }).map((_, i) => {
-        const filled = i < collected;
-
-        return (
-          <div
-            key={i}
-            className={`aspect-square rounded-xl min-h-12x flex items-center justify-center relative ${
-              filled
-                ? "border-2 border-primary-lighter bg-primary-light"
-                : "border-2 border-primary-lighter border-dashed bg-primary-darker/20"
-            }`}
-          >
-            <MemberLoyaltyStamp filled={filled} size={32} />
-
-            {!filled && (
-              <span className="text-[8px] text-white absolute bottom-1 right-1">
-                {i + 1}
-              </span>
-            )}
-          </div>
-        );
-      })}
+      <p className="text-xs text-white">{memberLoyalty.id}</p>
     </div>
   );
 }

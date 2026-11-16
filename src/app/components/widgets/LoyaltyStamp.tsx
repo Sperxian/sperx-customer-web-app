@@ -26,7 +26,8 @@ import {
   UtensilsIcon,
   WashingMachineIcon,
 } from "lucide-react";
-import { useMemberLoyalty } from "../MemberContext";
+import { useMemberLoyalty } from "../../(main)/member/[id]/MemberContext";
+import { StampBasedConfig } from "@/types/loyalty-program.types";
 
 const iconMap = {
   milk_tea: CupSodaIcon,
@@ -59,14 +60,17 @@ export type IconName = keyof typeof iconMap;
 const DEFAULT_ICON = BadgeCheckIcon;
 
 interface Props {
-  filled: boolean;
+  filled?: boolean;
   icon?: string;
   size?: number;
 }
 
+/**
+ * @deprecated Use `LoyaltyStamp` instead. This component is kept for backward compatibility.
+ */
 export function MemberLoyaltyStamp({ filled = false, size = 20 }: Props) {
   const { memberLoyalty } = useMemberLoyalty();
-  const { stampIcon } = memberLoyalty.loyaltyProgram.config;
+  const { stampIcon } = memberLoyalty.loyaltyProgram.config as StampBasedConfig;
 
   return (
     <LoyaltyStamp filled={filled} size={size} icon={stampIcon as IconName} />
