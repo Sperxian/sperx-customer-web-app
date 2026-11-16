@@ -139,7 +139,7 @@ function LoyaltyOverviewList({ cards = [] }: LoyaltyOverviewListProps) {
   return (
     <div className="flex flex-col gap-2">
       {cards.map((card) => (
-        <LoyaltyOverviewCard key={card.id} {...card} />
+        <LoyaltyOverviewCard key={card.id} memberLoyalty={card} />
       ))}
     </div>
   );

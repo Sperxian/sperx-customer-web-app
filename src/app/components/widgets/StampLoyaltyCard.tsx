@@ -1,13 +1,13 @@
-import { MemberLoyaltyStamp } from "@/app/components/widgets/LoyaltyStamp";
+import { LoyaltyStamp } from "@/app/components/widgets/LoyaltyStamp";
 import type { MemberLoyalty } from "@/types/domain";
+import { StampBasedConfig } from "@/types/loyalty-program.types";
 
 interface StampLoyaltyCardProps {
   memberLoyalty: MemberLoyalty;
 }
 
-export function StampLoyaltyCard({
-  memberLoyalty,
-}: StampLoyaltyCardProps) {
+export function StampLoyaltyCard({ memberLoyalty }: StampLoyaltyCardProps) {
+  const programConfig = memberLoyalty.loyaltyProgram.config as StampBasedConfig;
   const [reward] = memberLoyalty.loyaltyProgram.config.availableRewards;
   const totalStamps = reward.goalPoints;
   const trackingPoints = memberLoyalty.points % totalStamps;
@@ -29,7 +29,11 @@ export function StampLoyaltyCard({
           </p>
         </div>
 
-        <StampGrid total={totalStamps} collected={trackingPoints} />
+        <StampGrid
+          icon={programConfig.stampIcon}
+          total={totalStamps}
+          collected={trackingPoints}
+        />
       </div>
 
       <div className="flex items-center gap-2 mt-2.5">
@@ -50,11 +54,12 @@ export function StampLoyaltyCard({
 }
 
 interface StampGridProps {
+  icon: string;
   total: number;
   collected: number;
 }
 
-function StampGrid({ total, collected }: StampGridProps) {
+function StampGrid({ icon, total, collected }: StampGridProps) {
   const MAX_ITEMS_PER_ROW = 5;
   const rows = Math.ceil(total / MAX_ITEMS_PER_ROW);
   const columns = Math.ceil(total / rows);
@@ -80,7 +85,7 @@ function StampGrid({ total, collected }: StampGridProps) {
                 : "border-2 border-primary-lighter border-dashed bg-primary-darker/20"
             }`}
           >
-            <MemberLoyaltyStamp filled={filled} size={32} />
+            <LoyaltyStamp icon={icon} filled={filled} size={32} />
 
             {!filled && (
               <span className="text-[8px] text-white absolute bottom-1 right-1">

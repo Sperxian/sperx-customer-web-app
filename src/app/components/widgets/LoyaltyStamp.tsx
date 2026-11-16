@@ -60,11 +60,14 @@ export type IconName = keyof typeof iconMap;
 const DEFAULT_ICON = BadgeCheckIcon;
 
 interface Props {
-  filled: boolean;
+  filled?: boolean;
   icon?: string;
   size?: number;
 }
 
+/**
+ * @deprecated Use `LoyaltyStamp` instead. This component is kept for backward compatibility.
+ */
 export function MemberLoyaltyStamp({ filled = false, size = 20 }: Props) {
   const { memberLoyalty } = useMemberLoyalty();
   const { stampIcon } = memberLoyalty.loyaltyProgram.config as StampBasedConfig;
