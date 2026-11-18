@@ -39,17 +39,23 @@ export type ThemeColors = {
 };
 
 
-export type MemberPointsHistory = {
+export type Paginated = {
   page: number;
   size: number;
   total: number;
-  items: MemberPointTransaction[];
+  items: MemberLoyaltyHistoryItem[];
 }
 
-export type MemberPointTransaction = {
-  id: string;
-  memberId: string;
-  points: number;
+export type MemberLoyaltyHistoryItem = {
+  walletTransactionId: number | null;
+  pointTransactionId: number | null;
+  transactionDate: Date;
+  type: 'ACCUMULATION' | 'WALLET_TOP_UP' | 'WALLET_SPEND' | 'REDEMPTION'
+  points: number | null;
+  balance: number | null;
+  reward: {
+    redemptionId: string;
+    name: string;
+  } | null;
   notes?: string;
-  dateCreated: Date;
-};
+}

@@ -6,14 +6,14 @@ import { LoyaltyCardSection } from "@/app/(main)/member/[id]/components/LoyaltyC
 import { getMemberPointsHistory } from "@/lib/api/member";
 import { useMemberLoyalty } from "./MemberContext";
 import { useEffect, useState } from "react";
-import { MemberPointsHistory } from "@/types/domain";
+import { Paginated } from "@/types/domain";
 import { themeCssVars } from "@/lib/theme";
 import ClaimReminder from "./components/ClaimReminder";
 import { Alert } from "@/app/components/shared/Alert";
 
 export default function MemberPage() {
   const { memberLoyalty } = useMemberLoyalty();
-  const [history, setHistory] = useState<MemberPointsHistory | null>();
+  const [history, setHistory] = useState<Paginated | null>();
 
   const { theme } = memberLoyalty.shop.config;
   const themeVars = theme ? themeCssVars(theme) : undefined;

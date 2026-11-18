@@ -1,4 +1,4 @@
-import { MemberLoyalty, MemberPointsHistory } from "@/types/domain";
+import { MemberLoyalty, Paginated } from "@/types/domain";
 import apiClient from "./client";
 
 
@@ -27,15 +27,17 @@ export async function getAllMemberLoyalties(): Promise<MemberLoyalty[]> {
   }
 }
 
-export async function getMemberPointsHistory(memberId: string, page: number = 0, size: number = 20): Promise<MemberPointsHistory | null> {
+export async function getMemberPointsHistory(memberId: string, page: number = 0, size: number = 20): Promise<Paginated | null> {
   const params = { page, size };
   try {
-    const response = await apiClient.get<MemberPointsHistory>(`/customer/members/${memberId}/loyalty/history`, { params });
+    const response = await apiClient.get<Paginated>(`/customer/members/${memberId}/loyalty/history`, { params });
     return {
       ...response.data,
       items: response.data.items.map(item => ({
         ...item,
-        dateCreated: new Date(item.dateCreated) // Convert string to Date object
+        points: item.points ? Number(item.points) : null,
+        balance: item.balance ? Number(item.balance) : null,
+        transactionDate: new Date(item.transactionDate)
       })),
     };
 

@@ -1,14 +1,22 @@
-import { MemberPointsHistory } from "@/types/domain";
-import { MemberPointTransaction } from "@/types/domain";
-import { MemberLoyaltyStamp } from "../../../../components/widgets/LoyaltyStamp";
+import { MemberLoyaltyHistoryItem, Paginated } from "@/types/domain";
+import { LoyaltyStamp } from "../../../../components/widgets/LoyaltyStamp";
 import { formatDateTime } from "@/lib/utils/date.utils";
 import { GiftIcon } from "lucide-react";
+import { useMemberLoyalty } from "../MemberContext";
+import { StampBasedConfig } from "@/types/loyalty-program.types";
 
 interface ActivityHistoryProps {
-  history: MemberPointsHistory;
+  history: Paginated;
 }
 
 export function ActivityHistorySection({ history }: ActivityHistoryProps) {
+  console.log({ history });
+  const {
+    memberLoyalty: {
+      loyaltyProgram: { config },
+    },
+  } = useMemberLoyalty();
+  const { stampIcon = "star" } = config as StampBasedConfig;
   return (
     <div>
       <p className="text-sm capitalize mb-2 text-foreground/50">
@@ -18,12 +26,19 @@ export function ActivityHistorySection({ history }: ActivityHistoryProps) {
       {history.items.length > 0 ? (
         history.items.map((entry, i) => {
           const isLast = i === history.items.length - 1;
-          return <ActivityHistoryEntry key={i} entry={entry} isLast={isLast} />;
+          return (
+            <ActivityHistoryEntry
+              key={i}
+              entry={entry}
+              isLast={isLast}
+              icon={stampIcon}
+            />
+          );
         })
       ) : (
         <div className="flex flex-col items-center justify-center gap-4 p-4">
           <div className="aspect-square rounded-xl bg-primary/30 flex items-center justify-center flex-shrink-0 p-4">
-            <MemberLoyaltyStamp filled={false} size={24} />
+            <LoyaltyStamp icon={stampIcon} filled={false} size={24} />
           </div>
           <div className="flex flex-col items-center">
             <p className="text-md text-primary dark:text-primary-lighter">
@@ -40,12 +55,14 @@ export function ActivityHistorySection({ history }: ActivityHistoryProps) {
 }
 
 interface ActivityHistoryEntryProps {
-  entry: MemberPointTransaction;
+  entry: MemberLoyaltyHistoryItem;
+  icon: string;
   isLast: boolean;
 }
 
 export function ActivityHistoryEntry({
   entry,
+  icon,
   isLast,
 }: ActivityHistoryEntryProps) {
   const { points } = entry;
@@ -57,9 +74,9 @@ export function ActivityHistoryEntry({
       }`}
     >
       <span className="inline-flex gap-1 items-centers text-primary/80">
-        {points > 0 ? (
+        {entry.type === "ACCUMULATION" ? (
           <div className="w-[36px] aspect-square rounded-full bg-primary flex items-center justify-center flex-shrink-0">
-            <MemberLoyaltyStamp filled size={18} />
+            <LoyaltyStamp filled size={18} icon={icon} />
           </div>
         ) : (
           <div className="w-[36px] aspect-square rounded-full border flex items-center justify-center flex-shrink-0">
@@ -69,7 +86,7 @@ export function ActivityHistoryEntry({
       </span>
       <div>
         <p className="text-sm text-primary dark:text-primary-lighter">
-          {points > 0 ? (
+          {entry.type === "ACCUMULATION" ? (
             <span>
               Collected <span className="font-bold">{points}</span>{" "}
               {points === 1 ? "stamp" : "stamps"}
@@ -77,12 +94,12 @@ export function ActivityHistoryEntry({
           ) : (
             <span>
               Redeemed free reward for{" "}
-              <span className="font-bold">{Math.abs(points)}</span> stamps
+              <span className="font-bold">{Math.abs(points ?? 0)}</span> stamps
             </span>
           )}
         </p>
         <p className="text-xs text-foreground/50">
-          {formatDateTime(entry.dateCreated)}
+          {formatDateTime(entry.transactionDate)}
         </p>
       </div>
     </div>
