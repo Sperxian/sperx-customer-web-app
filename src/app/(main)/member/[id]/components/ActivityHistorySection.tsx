@@ -9,7 +9,6 @@ interface ActivityHistoryProps {
 }
 
 export function ActivityHistorySection({ history }: ActivityHistoryProps) {
-  console.log({ history });
   const {
     memberLoyalty: {
       loyaltyProgram: { config },
