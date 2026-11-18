@@ -19,6 +19,8 @@ export default async function MemberLayout({
   let memberLoyalty = null;
   try {
     memberLoyalty = await getMemberLoyalty(memberId);
+
+    console.log({ memberLoyalty });
   } catch (error) {
     if (isAxiosError(error) && error.response?.status === 403) {
       return <ForbiddenMemberLoyaltyContent />;
