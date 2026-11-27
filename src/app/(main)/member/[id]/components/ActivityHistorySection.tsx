@@ -1,14 +1,23 @@
-import { MemberPointsHistory } from "@/types/domain";
-import { MemberPointTransaction } from "@/types/domain";
-import { MemberLoyaltyStamp } from "../../../../components/widgets/LoyaltyStamp";
-import { formatDateTime } from "@/lib/utils/date.utils";
-import { GiftIcon } from "lucide-react";
+import { WalletIcon } from "lucide-react";
+import { LoyaltyStamp } from "../../../../components/widgets/LoyaltyStamp";
+import { useMemberLoyalty } from "../MemberContext";
+import { ActivityHistoryEntry } from "./ActivityHistoryEntry";
+import type { Paginated } from "@/types/domain";
+import type { LoyaltyProgramType } from "@/types/loyalty-program.types";
 
 interface ActivityHistoryProps {
-  history: MemberPointsHistory;
+  history: Paginated;
 }
 
 export function ActivityHistorySection({ history }: ActivityHistoryProps) {
+  const {
+    memberLoyalty: { loyaltyProgram },
+  } = useMemberLoyalty();
+  const stampIcon =
+    "stampIcon" in loyaltyProgram.config
+      ? loyaltyProgram.config.stampIcon
+      : "star";
+
   return (
     <div>
       <p className="text-sm capitalize mb-2 text-foreground/50">
@@ -16,73 +25,50 @@ export function ActivityHistorySection({ history }: ActivityHistoryProps) {
       </p>
 
       {history.items.length > 0 ? (
-        history.items.map((entry, i) => {
-          const isLast = i === history.items.length - 1;
-          return <ActivityHistoryEntry key={i} entry={entry} isLast={isLast} />;
-        })
+        history.items.map((entry, i) => (
+          <ActivityHistoryEntry
+            key={i}
+            entry={entry}
+          />
+        ))
       ) : (
-        <div className="flex flex-col items-center justify-center gap-4 p-4">
-          <div className="aspect-square rounded-xl bg-primary/30 flex items-center justify-center flex-shrink-0 p-4">
-            <MemberLoyaltyStamp filled={false} size={24} />
-          </div>
-          <div className="flex flex-col items-center">
-            <p className="text-md text-primary dark:text-primary-lighter">
-              No stamps yet
-            </p>
-            <p className="text-xs text-foreground/60">
-              Your activity will appear here after your first stamp.
-            </p>
-          </div>
-        </div>
+        <EmptyActivityState
+          programType={loyaltyProgram.type}
+          stampIcon={stampIcon}
+        />
       )}
     </div>
   );
 }
 
-interface ActivityHistoryEntryProps {
-  entry: MemberPointTransaction;
-  isLast: boolean;
+interface EmptyActivityStateProps {
+  programType: LoyaltyProgramType;
+  stampIcon: string;
 }
 
-export function ActivityHistoryEntry({
-  entry,
-  isLast,
-}: ActivityHistoryEntryProps) {
-  const { points } = entry;
+function EmptyActivityState({
+  programType,
+  stampIcon,
+}: EmptyActivityStateProps) {
+  const isWalletProgram = programType === "WALLET_BASED";
 
   return (
-    <div
-      className={`flex justify-start items-center gap-2 py-2 ${
-        !isLast ? "border-b border-foreground/10" : ""
-      }`}
-    >
-      <span className="inline-flex gap-1 items-centers text-primary/80">
-        {points > 0 ? (
-          <div className="w-[36px] aspect-square rounded-full bg-primary flex items-center justify-center flex-shrink-0">
-            <MemberLoyaltyStamp filled size={18} />
-          </div>
+    <div className="flex flex-col items-center justify-center gap-4 p-4">
+      <div className="aspect-square rounded-xl bg-primary/30 flex items-center justify-center flex-shrink-0 p-4">
+        {isWalletProgram ? (
+          <WalletIcon size={24} className="text-primary" aria-hidden="true" />
         ) : (
-          <div className="w-[36px] aspect-square rounded-full border flex items-center justify-center flex-shrink-0">
-            <GiftIcon className="text-primary" size={18} />
-          </div>
+          <LoyaltyStamp icon={stampIcon} filled={false} size={24} />
         )}
-      </span>
-      <div>
-        <p className="text-sm text-primary dark:text-primary-lighter">
-          {points > 0 ? (
-            <span>
-              Collected <span className="font-bold">{points}</span>{" "}
-              {points === 1 ? "stamp" : "stamps"}
-            </span>
-          ) : (
-            <span>
-              Redeemed free reward for{" "}
-              <span className="font-bold">{Math.abs(points)}</span> stamps
-            </span>
-          )}
+      </div>
+      <div className="flex flex-col items-center">
+        <p className="text-md text-primary dark:text-primary-lighter">
+          {isWalletProgram ? "No wallet activity yet" : "No stamps yet"}
         </p>
-        <p className="text-xs text-foreground/50">
-          {formatDateTime(entry.dateCreated)}
+        <p className="text-xs text-foreground/60">
+          {isWalletProgram
+            ? "Your activity will appear here after your first top-up."
+            : "Your activity will appear here after your first stamp."}
         </p>
       </div>
     </div>
