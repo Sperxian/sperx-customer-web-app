@@ -34,6 +34,9 @@ export default function MemberPage() {
     .reduce((min, curr) => Math.min(min, curr), Infinity);
     
   const canClaimReward = memberLoyalty.points >= minimumGoalPoints;
+  const shouldPromptWalletTopUp =
+    memberLoyalty.loyaltyProgram.type === "WALLET_BASED" &&
+    (memberLoyalty.walletBalance ?? 0) === 0;
 
   return (
     <div className="flex-1 relative overflow-hidden" style={themeVars}>
@@ -45,6 +48,13 @@ export default function MemberPage() {
             title="🎉 Your reward awaits."
             message="You've earned a reward. Claim it now! 🎁"
           />}
+          {shouldPromptWalletTopUp && (
+            <Alert
+              variant="warning"
+              title="Your wallet balance is zero"
+              message="Top up your wallet now to keep earning points with every purchase."
+            />
+          )}
           <LoyaltyCardSection />
           {history && history.items.length === 0 && <HowItWorksSection />}
           {history && <ActivityHistorySection history={history} />}
