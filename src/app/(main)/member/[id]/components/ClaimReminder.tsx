@@ -31,37 +31,33 @@ export default function ClaimReminder({ memberLoyalty }: Props) {
   if (showSignUpReminder) {
     metadata = {
       title: "Keep your loyalty progress safe",
-      message:
-        "Guest accounts are stored only on this device. " +
-        "Secure your stamps with an account.",
-      actionText: "Sign up",
-      action: (
-        <div className="flex gap-4 justify-end">
+      message: (
+        <>
           <SignUpButton
             mode="modal"
             forceRedirectUrl={`/member/${memberLoyalty.id}/claim`}
           >
-            <button className="text-primary dark:text-primary-lighter font-bold underline mt-1 capitalize">
-              Sign up
+            <button className="ml-1 text-primary dark:text-primary-lighter font-bold underline">
+              Sign up now
             </button>
           </SignUpButton>
-        </div>
+          <span> to secure your loyalty card.</span>
+        </>
       ),
     };
   } else if (showClaimReminder) {
     metadata = {
       title: "Is this your loyalty card?",
-      message: "Secure this loyalty card by linking it to your account.",
-      actionText: "Claim this",
-      action: (
-        <div className="flex gap-4 justify-end">
+      message: (
+        <>
           <button
-            className="text-primary dark:text-primary-lighter font-bold underline mt-1 capitalize"
+            className="ml-1 text-primary dark:text-primary-lighter font-bold underline"
             onClick={goToClaimPage}
           >
-            Claim Now
+            Claim this now
           </button>
-        </div>
+          <span> to secure your loyalty card.</span>
+        </>
       ),
     };
   }
@@ -75,7 +71,6 @@ export default function ClaimReminder({ memberLoyalty }: Props) {
       variant="warning"
       title={metadata.title}
       message={metadata.message}
-      actionSlot={metadata.action}
       dismissible
     />
   );

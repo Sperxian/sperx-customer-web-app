@@ -36,7 +36,7 @@ const variantConfig = {
 
 type AlertProps = {
   title: string;
-  message: string;
+  message: React.ReactNode;
   variant?: Variant;
   className?: string;
   actionSlot?: React.ReactNode;
