@@ -5,6 +5,7 @@ import { formatDate, formatTime } from "@/lib/utils/date.utils";
 import type { ReactNode } from "react";
 import { useMemberLoyalty } from "../MemberContext";
 import type { StampBasedConfig } from "@/types/loyalty-program.types";
+import { formatNumber } from "@/lib/utils/numeric.utils";
 
 interface ActivityHistoryEntryProps {
   entry: MemberLoyaltyHistoryItem;
@@ -110,7 +111,7 @@ function RedemptionEntry({ entry }: RedemptionEntryProps) {
 }
 
 function WalletTopUpEntry({ entry }: ActivityEntryContentProps) {
-  const amount = ((entry.balance ?? 0) / 100).toFixed(2);
+  const amount = (entry.balance ?? 0) / 100;
 
   return (
     <ActivityEntryLayout
@@ -124,7 +125,7 @@ function WalletTopUpEntry({ entry }: ActivityEntryContentProps) {
       }
     >
       <span>
-        Topped up wallet with <span className="font-bold">₱{amount}</span>
+        Topped up wallet with <span className="font-bold">₱{formatNumber(amount)}</span>
       </span>
     </ActivityEntryLayout>
   );
@@ -132,7 +133,7 @@ function WalletTopUpEntry({ entry }: ActivityEntryContentProps) {
 
 function WalletSpendEntry({ entry }: ActivityEntryContentProps) {
   const icon = useStampIcon();
-  const amountDeducted = (Math.abs(entry.balance ?? 0) / 100).toFixed(2);
+  const amountDeducted = Math.abs(entry.balance ?? 0) / 100;
   const points = entry.points ?? 0;
 
   return (
@@ -152,7 +153,7 @@ function WalletSpendEntry({ entry }: ActivityEntryContentProps) {
           {points === 1 ? "point" : "points"}
         </span>
         <span className="text-xs text-foreground/60">
-          ₱{amountDeducted} spent from wallet
+          ₱{formatNumber(amountDeducted)} spent from wallet
         </span>
       </div>
     </ActivityEntryLayout>
