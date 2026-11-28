@@ -47,12 +47,14 @@ export default function MemberPage() {
             variant="info"
             title="🎉 Your reward awaits."
             message="You've earned a reward. Claim it now! 🎁"
+            dismissible
           />}
           {shouldPromptWalletTopUp && (
             <Alert
               variant="warning"
               title="Your wallet balance is zero"
               message="Top up your wallet now to keep earning points with every purchase."
+              dismissible
             />
           )}
           <LoyaltyCardSection />

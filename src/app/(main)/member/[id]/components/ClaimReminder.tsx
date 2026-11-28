@@ -76,6 +76,7 @@ export default function ClaimReminder({ memberLoyalty }: Props) {
       title={metadata.title}
       message={metadata.message}
       actionSlot={metadata.action}
+      dismissible
     />
   );
 }

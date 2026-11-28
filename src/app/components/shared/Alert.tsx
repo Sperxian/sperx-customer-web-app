@@ -1,9 +1,13 @@
+"use client";
+
 import {
   TriangleAlertIcon,
   CircleXIcon,
   CheckCircleIcon,
   InfoIcon,
+  XIcon,
 } from "lucide-react";
+import { useState } from "react";
 
 type Variant = "warning" | "error" | "success" | "info";
 
@@ -36,6 +40,7 @@ type AlertProps = {
   variant?: Variant;
   className?: string;
   actionSlot?: React.ReactNode;
+  dismissible?: boolean;
 };
 
 export function Alert({
@@ -44,13 +49,19 @@ export function Alert({
   variant = "warning",
   className = "",
   actionSlot = undefined,
+  dismissible = false,
 }: AlertProps) {
+  const [isDismissed, setIsDismissed] = useState(false);
   const { container, iconBg, Icon } = variantConfig[variant];
+
+  if (isDismissed) {
+    return null;
+  }
 
   return (
     <div
       className={[
-        "w-full border border-2 rounded-2xl p-2 flex items-start gap-2 text-sm font-medium",
+        "relative w-full border border-2 rounded-2xl p-2 flex items-start gap-2 text-sm font-medium",
         container,
         className,
       ].join(" ")}
@@ -58,12 +69,22 @@ export function Alert({
       <div className={`aspect-square p-1.5 rounded-lg ${iconBg}`}>
         <Icon className="text-white" />
       </div>
-      <div className=" w-full flex flex-col">
+      <div className={`w-full flex flex-col ${dismissible ? "pr-6" : ""}`}>
         <span className="text-md font-bold">{title}</span>
         <span className="w-full text-xs font-medium">{message}</span>
 
         {actionSlot && <div className="mt-2 pr-4">{actionSlot}</div>}
       </div>
+      {dismissible && (
+        <button
+          type="button"
+          aria-label="Dismiss alert"
+          onClick={() => setIsDismissed(true)}
+          className="absolute right-2 top-2 rounded p-1 text-current hover:bg-current/10 focus-visible:outline-2 focus-visible:outline-offset-2"
+        >
+          <XIcon size={16} aria-hidden="true" />
+        </button>
+      )}
     </div>
   );
 }
