@@ -141,21 +141,35 @@ function WalletSpendEntry({ entry }: ActivityEntryContentProps) {
       entry={entry}
       leadingIcon={
         <span className="inline-flex gap-1 text-primary/80">
-          <div className="w-[36px] aspect-square rounded-full bg-primary flex items-center justify-center flex-shrink-0">
+          <div
+            className={`w-[36px] aspect-square rounded-full bg-primary flex items-center justify-center flex-shrink-0 ${
+              points === 0 ? "opacity-50" : ""
+            }`}
+          >
             <LoyaltyStamp filled size={18} icon={icon} />
           </div>
         </span>
       }
     >
-      <div className="flex flex-col">
-        <span>
-          Collected <span className="font-bold">{points}</span>{" "}
-          {points === 1 ? "point" : "points"}
-        </span>
-        <span className="text-xs text-foreground/60">
-          ₱{formatNumber(amountDeducted)} spent from wallet
-        </span>
-      </div>
+      {points === 0 ? (
+        <div className="flex flex-col">
+          <span>
+            Spent <span className="font-bold">₱{formatNumber(amountDeducted)}</span>{" "}
+            from wallet
+          </span>
+          <span className="text-xs text-foreground/60">No points collected ☹️</span>
+        </div>
+      ) : (
+        <div className="flex flex-col">
+          <span>
+            Collected <span className="font-bold">{points}</span>{" "}
+            {points === 1 ? "point" : "points"}
+          </span>
+          <span className="text-xs text-foreground/60">
+            ₱{formatNumber(amountDeducted)} spent from wallet
+          </span>
+        </div>
+      )}
     </ActivityEntryLayout>
   );
 }
